@@ -1,4 +1,27 @@
-# Getting Started with Create React App
+# CS4278_Group1
+Reuse Vandy
+
+## About
+The project is an e-commerce web application serving as a platform for Vanderbilt students to buy and sell goods to each other. The application will allow sellers to post listings of products that other users can bid for. The application will specialize in products that are most common for Vanderbilt students, such as appliances, furniture, and textbooks. The client for this project is Prof. Singh, and we will meet with him throughout the semester to inform him of our progress.
+
+## Scope of the project
+The application has a wide range of features that are designed to enhance the user's experience. It provides a user authentication system that allows users to sign in using their Vanderbilt email. The platform offers a convenient way for buyers and sellers to interact with each other, post listings, and engage in online auctions. Sellers can easily upload pictures and provide detailed descriptions as well as categorize their products. Buyers can search for items, place bids, and use an online chat feature to communicate with the seller.
+
+## Project Framework
+
+For the backend of our project, we will use JavaScript as our programming language. JavaScript is a powerful language for web development. JavaScript allows easy creation of APIs, can access databases easily in the backend of a website, and has many packages and open-source tools available for website development. Also, JavaScript is a widely used language in the website development industry, so using JavaScript will give us great exposure to what languages and tools are used at website development companies and jobs.
+The backend of our project will also use Express.js. Express.js is a tool in JavaScript used to create API interfaces with the frontend of our project. Using Express.js will allow us to easily extract information from our backend using Json format. This API interface will allow the frontend of our product to use the data from the backend to load the correct data in the frontend.
+
+For our database, we will use Google Firebase. Google Firebase is a developer-friendly database that can be easily integrated with JavaScript. Firebase has a free version of the product, so we can use the database without extra cost. Since Firebase is designed for use by software engineers, Firebase will be an easy database to integrate with our backend to store user data.
+
+The frontend of our project will use Next.js. Next.js is an open-source frontend development tool based on React. Because it is open source, Next.js can easily be downloaded and used for our project. Next.js allows easy integration between HTML and JavaScript code. This connection improves the overall ease of use in our coding. We can both easily render the website with HTML while updating the website using JavaScript. Next.js provides file-system-based routing, which improves the visualization of how our website is formatted. Overall, Next.js is a great and simple frontend development tool for us to use.
+
+To coordinate the downloads and functionality of our website, we will use Node.js. Node.js is a JavaScript runtime environment that provides easy downloading and installing of packages and tools, such as Express.js and Next.js described above. Node.js also streamlines the process of running server-side applications, providing a simple way to run our website in localhost to look at the website functionality.
+
+To coordinate the production of our product, we will use Git and GitHub. GitHub allows us to save the progress of our project remotely on the web, allowing us to easily access the project on different devices if needed. Git allows us to easily share progress between one member of the team and another, just running a few lines in the terminal to load all of everyone’s completed code. If we did not use Git, we would have to share code via email or another form of communication, which could easily result in mix-ups in what code is for what purpose, where the code should be located, and what the newest version of the code is.
+
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
