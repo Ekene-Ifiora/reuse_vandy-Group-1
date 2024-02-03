@@ -1,18 +1,10 @@
 import React from "react";
 import * as Components from './Styles/Components'
-import { Alert, AlertIcon, Button, Input } from "@chakra-ui/react";
-import { useState } from "react";
 import Login from "./Login";
 import Signup from "./Signup";
 
  function AuthForm() {
-    const [isLogin, setIsLogin] = useState(true);
      const [signIn, toggle] = React.useState(true);
-     const [inputs, setInputs] = useState({
-        email: "",
-        password: "",
-        name: "",
-      });
         
       return(
           <Components.Container>
