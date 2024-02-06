@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import AuthPage from "./pages/AuthPage/AuthPage";
+import Profile from "./pages/ProfilePage/ProfilePage";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/firebase";
 
@@ -14,6 +15,9 @@ function App() {
 				
 				{/* If user is not authenticated, show the authentication page, else navigate to the home page */}
 				<Route path='/auth' element={!authUser ? <AuthPage /> : <Navigate to='/' />} />
+
+				{/* Test */}
+				<Route path = '/profile' element = {<Profile/>}/>
 				
 				{/* Route to the profile page with dynamic username parameter */}
 				{/* <Route path='/:username' element={<ProfilePage />} /> */}
