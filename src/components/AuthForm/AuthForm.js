@@ -33,7 +33,7 @@ import Signup from "./Signup";
                       <Components.RightOverlayPanel signinIn={signIn}>
                         <Components.Title>Hello, Commodore!</Components.Title>
                         <Components.Paragraph>
-                            Enter Your personal details and start journey with us
+                            Enter Your personal details and start a journey with us
                         </Components.Paragraph>
                             <Components.GhostButton onClick={() => toggle(false)}>
                                 Sign Up
