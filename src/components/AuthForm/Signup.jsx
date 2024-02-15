@@ -17,7 +17,7 @@ const Signup = () => {
 
   const signUp = (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, inputs.fullName,inputs.username, inputs.email, inputs.password)
+    createUserWithEmailAndPassword(auth, inputs.fullName, inputs.username, inputs.email, inputs.password)
       .then((userCredential) => {
         console.log(userCredential);
       })
