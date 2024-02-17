@@ -1,7 +1,6 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
-
 * {
-  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
 }
 
 body {
@@ -12,8 +11,6 @@ body {
     rgb(0 0 255 / 50%)
   );
   display: flex;
-  /* justify-content: center;
-  align-items: center; */
   flex-direction: column;
   font-family: "Montserrat", sans-serif;
   height: 100vh;

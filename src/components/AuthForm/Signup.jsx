@@ -1,10 +1,10 @@
 import React from "react";
 import * as Components from './Styles/Components'
-import { Alert, AlertIcon, Button, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import { auth } from "../../firebase/firebase"
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import useSignUpWithEmailAndPassword from "../../hooks/useSignUpWithEmailAndPassword";
+// import "./Login.css"
 
 const Signup = () => {
   // State for storing email and password inputs
@@ -17,7 +17,7 @@ const Signup = () => {
 
   const signUp = (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, inputs.fullName,inputs.username, inputs.email, inputs.password)
+    createUserWithEmailAndPassword(auth, inputs.email, inputs.password, inputs.fullName,inputs.username,)
       .then((userCredential) => {
         console.log(userCredential);
       })
