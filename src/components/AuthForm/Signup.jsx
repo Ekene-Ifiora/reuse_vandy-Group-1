@@ -36,7 +36,6 @@ const Signup = () => {
                     <Components.Input type='username' placeholder='Username' value={inputs.username} onChange={(e) => setInputs({ ...inputs, username: e.target.value })}/>
                     <Components.Input type='email' placeholder='Email' value={inputs.email} onChange={(e) => setInputs({ ...inputs, email: e.target.value })}/>
                     <Components.Input type='password' placeholder='Password' value={inputs.password} onChange={(e) => setInputs({ ...inputs, password: e.target.value })}/>
-                    <Components.Anchor href='#'>Forgot your password?</Components.Anchor>
                     <Components.Button type='submit' isLoading={loading}>Sign Up</Components.Button>
                 </Components.Form>
     </>

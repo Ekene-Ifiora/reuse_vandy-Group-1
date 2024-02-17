@@ -29,19 +29,20 @@ function AuthForm() {
             </Components.GhostButton>
           </Components.LeftOverlayPanel>
 
-          <Components.RightOverlayPanel signinIn={signIn}>
-            <Components.Title>Hello, Commodore!</Components.Title>
-            <Components.Paragraph>
-              Enter Your personal details and start journey with us
-            </Components.Paragraph>
-            <Components.GhostButton onClick={() => toggle(false)}>
-              Sign Up
-            </Components.GhostButton>
-          </Components.RightOverlayPanel>
-        </Components.Overlay>
-      </Components.OverlayContainer>
-    </Components.Container>
-  );
-}
+                      <Components.RightOverlayPanel signinIn={signIn}>
+                        <Components.Title>Hello, Commodore!</Components.Title>
+                        <Components.Paragraph>
+                            Enter Your personal details and start a journey with us
+                        </Components.Paragraph>
+                            <Components.GhostButton onClick={() => toggle(false)}>
+                                Sign Up
+                            </Components.GhostButton> 
+                      </Components.RightOverlayPanel>
+  
+                  </Components.Overlay>
+              </Components.OverlayContainer>
+          </Components.Container>
+      )
+ }
 
-export default AuthForm;
+ export default AuthForm;
