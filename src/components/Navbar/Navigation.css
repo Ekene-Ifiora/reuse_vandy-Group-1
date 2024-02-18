@@ -24,3 +24,10 @@ input {
   height: 1.5rem;
   margin-left: 2rem;
 }
+
+body{
+  align-items: unset;
+  justify-content: start;
+}
+
+
