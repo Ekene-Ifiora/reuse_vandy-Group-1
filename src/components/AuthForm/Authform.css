@@ -4,12 +4,12 @@
   box-sizing: border-box;
 }
 
-body {
+.loginSignupContainer {
   background: #f6f5f7;
   background-image: linear-gradient(
     to bottom,
     rgb(255 255 0 / 50%),
-    rgb(0 0 255 / 50%)
+    rgba(5, 5, 7, 0.5)
   );
   display: flex;
   flex-direction: column;

@@ -2,6 +2,7 @@ import { FiHeart } from "react-icons/fi";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { CiLogout } from "react-icons/ci";
 import { CgProfile } from "react-icons/cg";
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import useLogout from "../../hooks/useLogout";
 import "./Navigation.css";
 import { useNavigate } from 'react-router-dom'; 
@@ -41,7 +42,7 @@ const Navigation = ({ handleInputChange, query }) => {
             <CgProfile onClick={goToProfile} className="nav-icons"/>
         </a>
         <a href="">
-        <CiLogout onClick={handleLogout} className="nav-icons"/>
+          <CiLogout onClick={handleLogout} className="nav-icons" />
         </a>
       </div>
     </nav>
