@@ -4,9 +4,21 @@ import { CiLogout } from "react-icons/ci";
 import { CgProfile } from "react-icons/cg";
 import useLogout from "../../hooks/useLogout";
 import "./Navigation.css";
+import { useNavigate } from 'react-router-dom'; 
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase/firebase'; 
 
 const Navigation = ({ handleInputChange, query }) => {
+    const navigate = useNavigate();
+    const [user, loading, error] = useAuthState(auth);
     const { handleLogout, isLoggingOut } = useLogout();
+
+    const goToProfile = () => {
+      if (user) {
+        navigate(`/profile/${user.uid}`); // Navigate using the user's UID
+      }
+    };
+
   return (
     <nav>
       <div className="nav-container">
@@ -26,7 +38,7 @@ const Navigation = ({ handleInputChange, query }) => {
           <AiOutlineShoppingCart className="nav-icons" />
         </a>
         <a href="">
-            <CgProfile className="nav-icons"/>
+            <CgProfile onClick={goToProfile} className="nav-icons"/>
         </a>
         <a href="">
         <CiLogout onClick={handleLogout} className="nav-icons"/>

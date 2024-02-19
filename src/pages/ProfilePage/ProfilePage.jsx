@@ -1,23 +1,38 @@
-import { Container, Flex, Link, Skeleton, SkeletonCircle, Text, VStack } from "@chakra-ui/react";
+import {Button, ChakraProvider, Container, Flex, Link, Skeleton, SkeletonCircle, Text, VStack } from "@chakra-ui/react";
 import ProfileHeader from "../../components/Profile/ProfileHeader";
 import ProfileTabs from "../../components/Profile/ProfileTabs";
 import ProfilePosts from "../../components/Profile/ProfilePosts";
-import useGetUserProfileByUsername from "../../hooks/useGetUserProfileByUsername";
+import useGetUserProfileById from "../../hooks/useGetUserProfileById";
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { useParams } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
+import { auth } from '../../firebase/firebase'; 
+import { useColorMode } from "@chakra-ui/react";
 
 const ProfilePage = () => {
-	const { username } = useParams();
-	const { isLoading, userProfile } = useGetUserProfileByUsername(username);
+	const [user] = useAuthState(auth);
+	
 
-	const userNotFound = !isLoading && !userProfile;
-	if (userNotFound) return <UserNotFound />;
+    const { isLoading, userProfile } = useGetUserProfileById(user?.uid);
+	const { colorMode } = useColorMode();
+
+  	console.log("Current color mode:", colorMode);
+	// console.log('User:', user);
+	// if (user) {
+	// 	console.log("User UID:", user.uid);
+	// } else {
+	// 	console.log("User is null at this point.");
+	// }
+    // console.log('isLoading:', isLoading, 'userProfile:', userProfile);
+	// const userNotFound = !isLoading && !userProfile;
+	// if (userNotFound) return <UserNotFound user={user}/>;
 
 	return (
 		<Container maxW='container.lg' py={5}>
 			<Flex py={10} px={4} pl={{ base: 4, md: 10 }} w={"full"} mx={"auto"} flexDirection={"column"}>
-				{!isLoading && userProfile && <ProfileHeader />}
-				{isLoading && <ProfileHeaderSkeleton />}
+				<ProfileHeader />
+				{/* {!isLoading && userProfile && <ProfileHeader />}
+				{isLoading && <ProfileHeaderSkeleton />} */}
 			</Flex>
 			<Flex
 				px={{ base: 2, sm: 4 }}
@@ -30,10 +45,11 @@ const ProfilePage = () => {
 				<ProfileTabs />
 				<ProfilePosts />
 			</Flex>
+		<Button colorScheme='blue'>Button</Button>
 		</Container>
 	);
 };
-
+ 
 export default ProfilePage;
 
 // skeleton for profile header
@@ -56,13 +72,15 @@ const ProfileHeaderSkeleton = () => {
 	);
 };
 
-const UserNotFound = () => {
-	return (
-		<Flex flexDir='column' textAlign={"center"} mx={"auto"}>
-			<Text fontSize={"2xl"}>User Not Found</Text>
-			<Link as={RouterLink} to={"/"} color={"blue.500"} w={"max-content"} mx={"auto"}>
-				Go home
-			</Link>
-		</Flex>
-	);
-};
+// const UserNotFound = ({user}) => {
+// 	return (
+// 		<Flex flexDir='column' textAlign={"center"} mx={"auto"}>
+// 			{user && <Text>Email: {user.email}</Text>}
+// 				<ProfileTabs />
+// 				<ProfilePosts />
+// 			<Link as={RouterLink} to={"/"} color={"blue.500"} w={"max-content"} mx={"auto"}>
+// 				Go home
+// 			</Link>
+// 		</Flex>
+// 	);
+// };

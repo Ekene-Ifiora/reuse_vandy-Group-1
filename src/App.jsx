@@ -1,10 +1,12 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import AuthPage from "./pages/AuthPage/AuthPage";
-import { BrowserRouter as Router } from "react-router-dom";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import PageLayout from "./Layouts/PageLayout/PageLayout";
+import { BrowserRouter as Router } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/firebase";
+
 
 function App() {
   const [authUser] = useAuthState(auth);
@@ -25,7 +27,7 @@ function App() {
           />
 
           {/* Route to the profile page with dynamic username parameter */}
-          <Route path="/:username" element={<ProfilePage />} />
+          <Route path="/profile/:uid" element={<ProfilePage />} />
         </Routes>
       </Router>
     </div>

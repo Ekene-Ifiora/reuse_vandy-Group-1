@@ -2,7 +2,7 @@ import React from "react";
 import * as Components from "./Styles/Components";
 import Login from "./Login";
 import Signup from "./Signup";
-// import "./Authform.css";
+import "./Authform.css";
 
 function AuthForm() {
   const [signIn, toggle] = React.useState(true);
