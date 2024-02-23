@@ -1,10 +1,9 @@
 import * as Components from "./Styles/Components";
-import { Alert, AlertIcon, Button, Input } from "@chakra-ui/react";
+import { Alert, AlertDescription } from "@chakra-ui/alert";
 import React, { useState } from "react";
 import useLogin from "../../hooks/useLogin";
 import { auth } from "../../firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-// import "./Login.css"
 
 const Login = () => {
   // State for storing email and password inputs
@@ -46,14 +45,6 @@ const Login = () => {
         />
         <Components.Anchor href="#">Forgot your password?</Components.Anchor>
 
-        {/* Display error message if login fails */}
-        {/* {error && (
-          <Alert status="error" fontSize={12} p={1} borderRadius={4}>
-            <AlertIcon fontSize={12} />
-            {error.message}
-          </Alert>
-        )} */}
-
         <Components.Button
           type="submit"
           isLoading={loading}
@@ -61,8 +52,23 @@ const Login = () => {
         >
           Sign In
         </Components.Button>
+
+        {/* Display error message if login fails */}
+        {error && (
+          <Alert
+            status="error"
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <AlertDescription style={{ color: "red", paddingTop: "20px" }}>
+              {error.message}
+            </AlertDescription>
+          </Alert>
+        )}
       </Components.Form>
-      {/* login(inputs) */}
     </>
   );
 };
