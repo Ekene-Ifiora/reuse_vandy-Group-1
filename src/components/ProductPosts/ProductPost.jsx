@@ -2,12 +2,13 @@ import { Box, Image } from "@chakra-ui/react";
 import PostFooter from "./PostFooter";
 import PostHeader from "./PostHeader";
 import useGetUserProfileById from "../../hooks/useGetUserProfileById";
-import "./Product.css";
+// import "./Product.css";
 
 const Products = ({ result }) => {
   return (
     <>
-      <section className="card-container">{result}</section>
+      <h1>This is the product page</h1>
+      {/* <section className="card-container">{result}</section> */}
     </>
   );
 };

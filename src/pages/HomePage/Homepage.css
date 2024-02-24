@@ -1,0 +1,16 @@
+.navbar {
+  /* overflow: hidden; */
+  /* background-color: #f8f5f5; */
+  background-color: #272b34;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+  z-index: 1;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  font-family: "Varela Round";
+}

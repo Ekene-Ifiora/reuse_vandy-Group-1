@@ -20,13 +20,21 @@ function App() {
           {/* If user is authenticated, show the home page, else navigate to the authentication page */}
           <Route
             path="/"
-            element={authUser ? <HomePage user={user}/> : <Navigate to="/auth" />}
+            element={
+              authUser ? <HomePage user={user} /> : <Navigate to="/auth" />
+            }
           />
 
           {/* If user is not authenticated, show the authentication page, else navigate to the home page */}
           <Route
             path="/auth"
-            element={!authUser ? <AuthPage onAuth={(user) => setUser(user)} /> : <Navigate to="/" />}
+            element={
+              !authUser ? (
+                <AuthPage onAuth={(user) => setUser(user)} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
 
           {/* Route to the profile page with dynamic username parameter */}
