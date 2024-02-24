@@ -1,10 +1,9 @@
 nav {
   display: flex;
-  border-bottom: 2px solid #f3f3f3;
+  /* border-bottom: 2px solid #f3f3f3; */
   justify-content: space-around;
   align-items: center;
-  padding: 20px;
-  z-index: 999;
+  padding: 10px;
   margin-left: 2rem;
 }
 
@@ -16,18 +15,28 @@ input {
   margin-right: 20px;
   border-radius: 5px;
   position: relative;
-  width: 14rem;
+  width: 24rem;
 }
 
 .nav-icons {
   width: 1.5rem;
   height: 1.5rem;
   margin-left: 2rem;
+  color: white;
 }
 
-body{
+
+
+body {
   align-items: unset;
   justify-content: start;
 }
 
+.profile-container {
+  margin-left: auto;
+}
 
+.create,
+.logout {
+  cursor: pointer;
+}

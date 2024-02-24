@@ -72,9 +72,9 @@ const ProductListing = () =>  {
   return (
     <>
       {/* <Sidebar handleChange={handleChange} /> */}
-      <Navigation query={query} handleInputChange={handleInputChange} />
+      {/* <Navigation query={query} handleInputChange={handleInputChange} /> */}
       {/* <Recommended handleClick={handleClick} /> */}
-      {/* <Products result={result} /> */}
+      <Products result={result} />
     </>
   );
 }
