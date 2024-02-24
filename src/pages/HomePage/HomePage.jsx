@@ -14,7 +14,6 @@ const HomePage = (client) => {
     // </>
 
     <Container paddingTop="unset" maxW={"container.lg"}>
-      <Button colorScheme="blue">Button</Button>
       <Navigation />
     </Container>
 

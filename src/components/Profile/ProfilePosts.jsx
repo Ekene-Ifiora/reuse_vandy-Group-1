@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Skeleton, Text, VStack } from "@chakra-ui/react";
+import { Box, ChakraProvider, Flex, Grid, Skeleton, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import ProfilePost from "./ProfilePost";
 import useGetUserPosts from "../../hooks/useGetUserPosts";
@@ -17,6 +17,7 @@ const ProfilePosts = () => {
 	}, [])
 
 	return (
+	<ChakraProvider>
 		<Grid
 			templateColumns={{
 				sm: "repeat(1, 1fr)",
@@ -26,7 +27,7 @@ const ProfilePosts = () => {
 			columnGap={1}
 		>
 			{isLoading &&
-				[0, 1, 2, 3, 4, 5].map((_, idx) => (
+				[0, 1, 2].map((_, idx) => (
 					<VStack key={idx} alignItems={"flex-start"} gap={4}>
 						<Skeleton w={"full"}>
 							<Box h='300px'>contents wrapped</Box>
@@ -36,12 +37,13 @@ const ProfilePosts = () => {
 
 			{!isLoading && (
 				<>
-					<ProfilePost img='/img1.png' /> 
-					<ProfilePost img='/img1.png' /> 
-					<ProfilePost img='/img1.png' /> 
+					<ProfilePost img='/img2.png' /> 
+					<ProfilePost img='/img2.png' /> 
+					<ProfilePost img='/img2.png' /> 
 				</>
 			)}
 		</Grid>
+	</ChakraProvider>
 	);
 };
 
