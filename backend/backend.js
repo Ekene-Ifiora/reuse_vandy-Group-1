@@ -13,10 +13,11 @@ app.get('/:auth', (req,res) => {
 // add API calls for getting data, such as pictures, etc from firebase
 
 app.get('/', (req, res) => { 
-    res.status(200).send({
-        Message: 'Hello World'
+    res.status(200).json({
+        message: 'Hello World'
     });
 });
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Listening on ${port}`));
+module.exports = app;
