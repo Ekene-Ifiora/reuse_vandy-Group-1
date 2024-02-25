@@ -7,6 +7,8 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const GoogleAuth = ({ prefix }) => {
   // Custom hook for handling Google authentication
+
+  // call from backend API instead of right here
   const [signInWithGoogle, , , error] = useSignInWithGoogle(auth);
 
   // Custom hook for displaying toasts

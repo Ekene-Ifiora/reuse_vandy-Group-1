@@ -1,6 +1,7 @@
 import * as Components from "./Styles/Components";
 import { Alert, AlertDescription } from "@chakra-ui/alert";
 import React, { useState } from "react";
+import axios from 'axios'
 import useLogin from "../../hooks/useLogin";
 import { auth } from "../../firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -12,16 +13,28 @@ const Login = () => {
     password: "",
   });
 
-  const signIn = (e) => {
+  // const signIn = (e) => {
+  //   e.preventDefault();
+  //   signInWithEmailAndPassword(auth, inputs.email, inputs.password)
+  //     .then((userCredential) => {
+  //       console.log(userCredential);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+
+  const signIn = async (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, inputs.email, inputs.password)
-      .then((userCredential) => {
-        console.log(userCredential);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+    const email = inputs.email;
+    const password = inputs.password;
+
+    try {
+      const user = (await axios.post(`http://localhost:8080/login`, { email, password })).data;
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // Custom hook for handling login functionality
   const { loading, error, login } = useLogin();

@@ -19,7 +19,6 @@ const useLogin = () => {
 			
 			
 			if (userCred) {
-				console.log("Got here");
 				const docRef = doc(firestore, "users", userCred.user.uid);
 				const docSnap = await getDoc(docRef);
 				localStorage.setItem("user-info", JSON.stringify(docSnap.data()));
