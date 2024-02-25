@@ -1,4 +1,4 @@
-import {Button, ChakraProvider, Container, Flex, Link, Skeleton, SkeletonCircle, Text, VStack } from "@chakra-ui/react";
+import {Button, ChakraProvider, Container, Flex, Link, Skeleton, SkeletonCircle, Text, VStack, Box} from "@chakra-ui/react";
 import ProfileHeader from "../../components/Profile/ProfileHeader";
 import ProfileTabs from "../../components/Profile/ProfileTabs";
 import ProfilePosts from "../../components/Profile/ProfilePosts";
@@ -8,15 +8,23 @@ import { useParams } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import { auth } from '../../firebase/firebase'; 
 import { useColorMode } from "@chakra-ui/react";
+import { RiArrowGoBackLine } from "react-icons/ri";
+import { useNavigate } from 'react-router-dom'; 
 
 const ProfilePage = () => {
 	const [user] = useAuthState(auth);
-	
+	const navigate = useNavigate();
 
     const { isLoading, userProfile } = useGetUserProfileById(user?.uid);
 	const { colorMode } = useColorMode();
 
   	console.log("Current color mode:", colorMode);
+
+	const goToHome= () => {
+		if (user) {
+			navigate(`/`); 
+		  }
+	}
 	// console.log('User:', user);
 	// if (user) {
 	// 	console.log("User UID:", user.uid);
@@ -29,10 +37,13 @@ const ProfilePage = () => {
 
 	return (
 		<Container maxW='container.lg' py={5}>
-			<Flex py={10} px={4} pl={{ base: 4, md: 10 }} w={"full"} mx={"auto"} flexDirection={"column"}>
+			
+			<Flex position="relative" py={10} px={4} pl={{ base: 4, md: 10 }} w="full" mx="auto" flexDirection="column">
 				<ProfileHeader />
-				{/* {!isLoading && userProfile && <ProfileHeader />}
-				{isLoading && <ProfileHeaderSkeleton />} */}
+				
+				<Box position="absolute" top={0} right={0} p={4}>
+				<RiArrowGoBackLine onClick = {goToHome} size="24px" />
+				</Box>
 			</Flex>
 			<Flex
 				px={{ base: 2, sm: 4 }}
@@ -45,7 +56,6 @@ const ProfilePage = () => {
 				<ProfileTabs />
 				<ProfilePosts />
 			</Flex>
-		<Button colorScheme='blue'>Button</Button>
 		</Container>
 	);
 };
