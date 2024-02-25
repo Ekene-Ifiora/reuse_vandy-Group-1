@@ -27,5 +27,14 @@ app.get('/', (req, res) => {
 });
 
 const port = process.env.PORT || 8080;
-app.listen(port, () => console.log(`Listening on ${port}`));
-export default app;
+const server = app.listen(port, () => console.log(`Listening on ${port}`));
+
+process.on('SIGINT', () => {
+  console.log('Recieved SIGINT. Closing server gracefully');
+  server.close(() => {
+    console.log('Server closed.');
+    process.exit(0);
+  });
+});
+
+export default server;
