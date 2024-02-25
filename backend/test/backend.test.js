@@ -1,7 +1,7 @@
 import { describe, it } from 'mocha';
 import { expect } from 'chai';
 import supertest from 'supertest';
-import app from '../backend.js';
+import app from '../src/backend.js';
 
 describe('API tests', () => {
     it('Hello World', async () => {
