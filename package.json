@@ -5,14 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"cd backend && npm start\" \"cd frontend && npm start\"",
-    "build": "react-scripts build",
+    "build": "concurrently \"cd backend && npm build\" \"cd frontend && npm build\"",
     "test": "concurrently \"cd backend && npm test\" \"cd frontend && npm test\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^8.2.2",
-    "react-scripts": "^5.0.1"
+    "concurrently": "^8.2.2"
   }
 }
