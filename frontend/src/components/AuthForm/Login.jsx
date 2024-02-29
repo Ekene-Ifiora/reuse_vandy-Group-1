@@ -13,28 +13,16 @@ const Login = () => {
     password: "",
   });
 
-  // const signIn = (e) => {
-  //   e.preventDefault();
-  //   signInWithEmailAndPassword(auth, inputs.email, inputs.password)
-  //     .then((userCredential) => {
-  //       console.log(userCredential);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-
-  const signIn = async (e) => {
+  const signIn = (e) => {
     e.preventDefault();
-    const email = inputs.email;
-    const password = inputs.password;
-
-    try {
-      const user = (await axios.post(`http://localhost:8080/login`, { email, password })).data;
-    } catch (error) {
-      console.log(error)
-    }
-  }
+    signInWithEmailAndPassword(auth, inputs.email, inputs.password)
+      .then((userCredential) => {
+        console.log(userCredential);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   // Custom hook for handling login functionality
   const { loading, error, login } = useLogin();
