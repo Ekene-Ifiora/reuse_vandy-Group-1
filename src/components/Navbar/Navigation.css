@@ -37,6 +37,7 @@ body {
 .chat,
 .cart,
 .logout,
+.home,
 .profile-container {
   cursor: pointer;
 }

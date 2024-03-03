@@ -8,7 +8,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/firebase";
 import { useState } from "react";
 
-
 function App() {
   const [authUser] = useAuthState(auth);
   const [user, setUser] = useState();
@@ -38,7 +37,7 @@ function App() {
           />
 
           {/* Route to the profile page with dynamic username parameter */}
-          <Route path="/profile/:uid" element={<ProfilePage />} />
+          <Route path="/:username" element={<ProfilePage />} />
         </Routes>
       </Router>
     </div>

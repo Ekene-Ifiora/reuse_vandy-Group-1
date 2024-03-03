@@ -6,7 +6,7 @@ const HomePage = (client) => {
   return (
     <>
       <div className="navbar">
-        <Navigation />
+        <Navigation showProfileIcon={true} showHomeIcon={false} />
       </div>
       <div className="productListing">
         <ProductListing />
