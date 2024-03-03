@@ -14,13 +14,10 @@ const Login = () => {
 
   const signIn = (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, inputs.email, inputs.password)
-      .then((userCredential) => {
-        console.log(userCredential);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    login(inputs);
+    {
+      error && console.log(error.message);
+    }
   };
 
   // Custom hook for handling login functionality
@@ -45,11 +42,7 @@ const Login = () => {
         />
         <Components.Anchor href="#">Forgot your password?</Components.Anchor>
 
-        <Components.Button
-          type="submit"
-          isLoading={loading}
-          onClick={() => login(inputs)}
-        >
+        <Components.Button type="submit" isLoading={loading}>
           Sign In
         </Components.Button>
 

@@ -1,6 +1,5 @@
 nav {
   display: flex;
-  /* border-bottom: 2px solid #f3f3f3; */
   justify-content: space-around;
   align-items: center;
   padding: 10px;
@@ -25,8 +24,6 @@ input {
   color: white;
 }
 
-
-
 body {
   align-items: unset;
   justify-content: start;
@@ -37,6 +34,9 @@ body {
 }
 
 .create,
-.logout,.profile-container {
+.chat,
+.cart,
+.logout,
+.profile-container {
   cursor: pointer;
 }
