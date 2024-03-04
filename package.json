@@ -64,5 +64,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/react-hooks": "^8.0.1",
+    "jest-circus": "^29.7.0"
   }
 }
