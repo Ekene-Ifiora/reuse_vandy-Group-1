@@ -1,8 +1,8 @@
-// // Import necessary dependencies and hooks for testing
-// import { renderHook, act } from "@testing-library/react";
-// import { useLikePost } from "../useLikePost"; // Make sure to update the import path
+// Import necessary dependencies and hooks for testing
+import { renderHook, act } from "@testing-library/react";
+import useLikePost from "../useLikePost"; // Make sure to update the import path
 
-// // Mock necessary dependencies
+// Mock necessary dependencies
 // jest.mock("../../store/authStore", () => ({
 //   useAuthStore: jest.fn(() => ({
 //     user: { uid: "testUserId" }, // Mock the authenticated user object
@@ -16,15 +16,28 @@
 //   updateDoc: jest.fn(),
 // }));
 
-// describe("useLikePost", () => {
-//   it("should initialize with correct initial state", () => {
-//     const post = { id: "testPostId", likes: ["user1", "user2"] };
-//     const { result } = renderHook(() => useLikePost(post));
+jest.mock('react-firebase-hooks/auth');
+jest.mock('../useShowToast');
+jest.mock('../../store/authStore');
 
-//     expect(result.current.isLiked).toBe(true);
-//     expect(result.current.likes).toBe(post.likes.length);
-//     expect(result.current.isUpdating).toBe(false);
-//   });
+// Mock the necessary Firebase functions
+jest.mock('firebase/firestore', () => ({
+  ...jest.requireActual('firebase/firestore'),  // Use the actual implementation for other functions
+  getFirestore: jest.fn(() => ({
+    doc: jest.fn(),
+    getDoc: jest.fn(),
+  })),
+}));
+
+describe("useLikePost", () => {
+  it("should initialize with correct initial state", () => {
+    const post = { id: "testPostId", likes: ["user1", "user2"] };
+    const { result } = renderHook(() => useLikePost(post));
+
+    expect(result.current.isLiked).toBe(false);
+    expect(result.current.likes).toBe(post.likes.length);
+    expect(result.current.isUpdating).toBe(false);
+  });
 
 //   it("should handle liking a post", async () => {
 //     const post = { id: "testPostId", likes: ["user1", "user2"] };
@@ -94,4 +107,4 @@
 //     expect(/* Check if showToast was called with the correct parameters for an error */).toHaveBeenCalled();
 //   });
 
-// });
+});

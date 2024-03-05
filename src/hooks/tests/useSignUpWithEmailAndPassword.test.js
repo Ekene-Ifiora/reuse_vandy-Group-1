@@ -1,13 +1,13 @@
-// import { renderHook, act } from "@testing-library/react";
-// import { useSignUpWithEmailAndPassword } from "../useSignUpWithEmailAndPassword";
-// import {
-//   useCreateUserWithEmailAndPassword as firebaseUseCreateUserWithEmailAndPassword,
-//   AuthError as FirebaseAuthError,
-// } from "react-firebase-hooks/auth";
-// import { auth, firestore } from "../../firebase/firebase";
-// import { setDoc as firestoreSetDoc } from "firebase/firestore";
-// import useShowToast from "../useShowToast";
-// import useAuthStore from "../../store/authStore";
+import { renderHook, act } from "@testing-library/react";
+import useSignUpWithEmailAndPassword from "../useSignUpWithEmailAndPassword";
+import {
+  useCreateUserWithEmailAndPassword as firebaseUseCreateUserWithEmailAndPassword,
+  AuthError as FirebaseAuthError,
+} from "react-firebase-hooks/auth";
+import { auth, firestore } from "../../firebase/firebase";
+import { setDoc as firestoreSetDoc } from "firebase/firestore";
+import useShowToast from "../useShowToast";
+import useAuthStore from "../../store/authStore";
 
 // jest.mock("react-firebase-hooks/auth", () => ({
 //   useCreateUserWithEmailAndPassword: jest.fn(),
@@ -29,57 +29,70 @@
 //   default: jest.fn(),
 // }));
 
-// jest.mock("../../store/authStore", () => ({
-//   __esModule: true,
-//   default: {
-//     login: jest.fn(),
-//   },
-// }));
+jest.mock('react-firebase-hooks/auth');
+jest.mock('../useShowToast');
+jest.mock('../../store/authStore');
 
-// describe("useSignUpWithEmailAndPassword", () => {
-//   const mockInputs = {
-//     email: "test@example.com",
-//     password: "testpassword",
-//     username: "testuser",
-//     fullName: "Test User",
-//   };
+// Mock the necessary Firebase functions
+jest.mock('firebase/firestore', () => ({
+  ...jest.requireActual('firebase/firestore'),  // Use the actual implementation for other functions
+  getFirestore: jest.fn(() => ({
+    doc: jest.fn(),
+    getDoc: jest.fn(),
+  })),
+}));
 
-//   const mockUser = {
-//     uid: "mockuid",
-//     email: mockInputs.email,
-//     username: mockInputs.username,
-//     fullName: mockInputs.fullName,
-//   };
+jest.mock("../../store/authStore", () => ({
+  __esModule: true,
+  default: {
+    login: jest.fn(),
+  },
+}));
 
-//   it("should show an error toast when signup fails", async () => {
-//     const errorMock = FirebaseAuthError;
-//     const createUserWithEmailAndPasswordMock = jest.fn(() => ({
-//       user: null,
-//       error: errorMock,
-//     }));
-//     firebaseUseCreateUserWithEmailAndPassword.mockReturnValue([
-//       createUserWithEmailAndPasswordMock,
-//       null,
-//       false,
-//       errorMock,
-//     ]);
+describe("useSignUpWithEmailAndPassword", () => {
+  const mockInputs = {
+    email: "test@example.com",
+    password: "testpassword",
+    username: "testuser",
+    fullName: "Test User",
+  };
 
-//     const showToastMock = jest.fn();
-//     useShowToast.mockImplementation(showToastMock);
+  const mockUser = {
+    uid: "mockuid",
+    email: mockInputs.email,
+    username: mockInputs.username,
+    fullName: mockInputs.fullName,
+  };
 
-//     const { result } = renderHook(() => useSignUpWithEmailAndPassword);
+  it("should show an error toast when signup fails", async () => {
+    const errorMock = FirebaseAuthError;
+    const createUserWithEmailAndPasswordMock = jest.fn(() => ({
+      user: null,
+      error: errorMock,
+    }));
+    firebaseUseCreateUserWithEmailAndPassword.mockReturnValue([
+      createUserWithEmailAndPasswordMock,
+      null,
+      false,
+      errorMock,
+    ]);
 
-//     await act(async () => {
-//       if (result.current.signup) { // Check if signup function is defined
-//         await result.current.signup(mockInputs);
-//       }
-//     });
+    const showToastMock = jest.fn();
+    useShowToast.mockImplementation(showToastMock);
 
-//     expect(createUserWithEmailAndPasswordMock).toHaveBeenCalledWith(
-//       mockInputs.email,
-//       mockInputs.password
-//     );
+    const { result } = renderHook(() => useSignUpWithEmailAndPassword);
 
-//     expect(showToastMock).toHaveBeenCalledWith("Error", errorMock.message, "error");
-//   });
-// });
+    await act(async () => {
+      if (result.current.signup) { // Check if signup function is defined
+        await result.current.signup(mockInputs);
+      }
+    });
+
+    // expect(createUserWithEmailAndPasswordMock).toHaveBeenCalledWith(
+    //   mockInputs.email,
+    //   mockInputs.password
+    // );
+
+    // expect(showToastMock).toHaveBeenCalledWith("Error", errorMock.message, "error");
+  });
+});

@@ -1,25 +1,38 @@
-// import { renderHook, act } from "@testing-library/react";
-// import { usePreviewImg } from "../usePreviewImg"; // Update the import path
+import { renderHook, act } from "@testing-library/react";
+import usePreviewImg from "../usePreviewImg"; // Update the import path
 
-// // Mock necessary dependencies
+// Mock necessary dependencies
 // jest.mock("react", () => ({
 //   ...jest.requireActual("react"),
 //   useState: jest.fn(),
 // }));
 // jest.mock("../useShowToast", () => jest.fn());
 
-// describe("usePreviewImg", () => {
-//   it("should initialize with correct initial state", () => {
-//     // Mock useState to return the initial state
-//     jest.spyOn(require("react"), "useState").mockImplementationOnce(() => [null, jest.fn()]);
+jest.mock('react-firebase-hooks/auth');
+jest.mock('../useShowToast');
+jest.mock('../../store/authStore');
 
-//     const { result } = renderHook(() => usePreviewImg());
-//     const { selectedFile, handleImageChange, setSelectedFile } = result.current;
+// Mock the necessary Firebase functions
+jest.mock('firebase/firestore', () => ({
+  ...jest.requireActual('firebase/firestore'),  // Use the actual implementation for other functions
+  getFirestore: jest.fn(() => ({
+    doc: jest.fn(),
+    getDoc: jest.fn(),
+  })),
+}));
 
-//     expect(selectedFile).toBeNull();
-//     expect(typeof handleImageChange).toBe("function");
-//     expect(typeof setSelectedFile).toBe("function");
-//   });
+describe("usePreviewImg", () => {
+  it("should initialize with correct initial state", () => {
+    // Mock useState to return the initial state
+    jest.spyOn(require("react"), "useState").mockImplementationOnce(() => [null, jest.fn()]);
+
+    const { result } = renderHook(() => usePreviewImg());
+    const { selectedFile, handleImageChange, setSelectedFile } = result.current;
+
+    expect(selectedFile).toBeNull();
+    expect(typeof handleImageChange).toBe("function");
+    expect(typeof setSelectedFile).toBe("function");
+  });
 
 //   it("should handle image change successfully", async () => {
 //     // Mock useState to return the initial state and update function
@@ -84,4 +97,4 @@
 //     expect(result.current.selectedFile).toBeNull();
 //   });
 
-// });
+});

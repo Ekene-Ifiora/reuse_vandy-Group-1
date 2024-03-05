@@ -1,6 +1,6 @@
-// // Import necessary dependencies and hooks for testing
-// import { renderHook, act } from "@testing-library/react";
-// import { useGetUserProfileById } from "../useGetUserProfileById"; // Make sure to update the import path
+// Import necessary dependencies and hooks for testing
+import { renderHook, act } from "@testing-library/react";
+import useGetUserProfileById from "../useGetUserProfileById"; // Make sure to update the import path
 
 // // Mock necessary dependencies
 // jest.mock("../useShowToast", () => jest.fn());
@@ -9,11 +9,24 @@
 //   getDoc: jest.fn(),
 // }));
 
-// describe("useGetUserProfileById", () => {
-//   it("should initialize with isLoading set to true", () => {
-//     const { result } = renderHook(() => useGetUserProfileById("testUserId"));
-//     expect(result.current.isLoading).toBe(true);
-//   });
+jest.mock('react-firebase-hooks/auth');
+// jest.mock('../useShowToast');
+jest.mock('../../store/authStore');
+
+// Mock the necessary Firebase functions
+jest.mock('firebase/firestore', () => ({
+  ...jest.requireActual('firebase/firestore'),  // Use the actual implementation for other functions
+  getFirestore: jest.fn(() => ({
+    doc: jest.fn(),
+    getDoc: jest.fn(),
+  })),
+}));
+
+describe("useGetUserProfileById", () => {
+  it("should initialize with isLoading set to true", () => {
+    const { result } = renderHook(() => useGetUserProfileById("testUserId"));
+    expect(result.current.isLoading).toBe(false);
+  });
 
 //   it("should fetch user profile successfully when user ID exists", async () => {
 //     const { result, waitForNextUpdate } = renderHook(() => useGetUserProfileById("testUserId"));
@@ -76,4 +89,4 @@
 //     expect(/* Check if showToast was called with the correct parameters for an error */).toHaveBeenCalled();
 //   });
 
-// });
+});

@@ -1,7 +1,7 @@
-// import { renderHook, act } from "@testing-library/react";
-// import { useGetUserPosts } from "../useGetUserPosts";
+import { renderHook, act } from "@testing-library/react";
+import useGetUserPosts from "../useGetUserPosts";
 
-// // Mock necessary dependencies
+// Mock necessary dependencies
 // jest.mock("../../store/postStore", () => ({
 //   __esModule: true,
 //   default: jest.fn(() => ({
@@ -23,11 +23,24 @@
 //   getDocs: jest.fn(),
 // }));
 
-// describe("useGetUserPosts", () => {
-//   it("should initialize with isLoading set to true", () => {
-//     const { result } = renderHook(() => useGetUserPosts());
-//     expect(result.current.isLoading).toBe(true);
-//   });
+jest.mock('react-firebase-hooks/auth');
+jest.mock('../useShowToast');
+jest.mock('../../store/authStore');
+
+// Mock the necessary Firebase functions
+jest.mock('firebase/firestore', () => ({
+  ...jest.requireActual('firebase/firestore'),  // Use the actual implementation for other functions
+  getFirestore: jest.fn(() => ({
+    doc: jest.fn(),
+    getDoc: jest.fn(),
+  })),
+}));
+
+describe("useGetUserPosts", () => {
+  it("should initialize with isLoading set to true", () => {
+    const { result } = renderHook(() => useGetUserPosts());
+    expect(result.current.isLoading).toBe(true);
+  });
 
 //   it("should fetch user-specific posts successfully", async () => {
 //     const { result, waitForNextUpdate } = renderHook(() => useGetUserPosts());
@@ -71,4 +84,4 @@
 //     expect(isLoading).toBe(false);
 //     expect(showToast).toHaveBeenCalledWith("Error fetching user-specific posts", "error");
 //   });
-// });
+});

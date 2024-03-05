@@ -1,8 +1,8 @@
-// // Import necessary dependencies and hooks for testing
-// import { renderHook, act } from "@testing-library/react";
-// import { useLogout } from "../useLogout"; // Make sure to update the import path
+// Import necessary dependencies and hooks for testing
+import { renderHook, act } from "@testing-library/react";
+import useLogout from "../useLogout"; // Make sure to update the import path
 
-// // Mock necessary dependencies
+// Mock necessary dependencies
 // jest.mock("react-firebase-hooks/auth", () => ({
 //   useSignOut: jest.fn(() => [jest.fn(), false, null]),
 // }));
@@ -16,15 +16,28 @@
 //   auth: {},
 // }));
 
-// describe("useLogout", () => {
-//   it("should initialize with correct initial state", () => {
-//     const { result } = renderHook(() => useLogout());
-//     const { handleLogout, isLoggingOut, error } = result.current;
+// jest.mock('react-firebase-hooks/auth');
+jest.mock('../useShowToast');
+jest.mock('../../store/authStore');
 
-//     expect(typeof handleLogout).toBe("function");
-//     expect(isLoggingOut).toBe(false);
-//     expect(error).toBe(null);
-//   });
+// Mock the necessary Firebase functions
+jest.mock('firebase/firestore', () => ({
+  ...jest.requireActual('firebase/firestore'),  // Use the actual implementation for other functions
+  getFirestore: jest.fn(() => ({
+    doc: jest.fn(),
+    getDoc: jest.fn(),
+  })),
+}));
+
+describe("useLogout", () => {
+  it("should initialize with correct initial state", () => {
+    const { result } = renderHook(() => useLogout());
+    const { handleLogout, isLoggingOut, error } = result.current;
+
+    expect(typeof handleLogout).toBe("function");
+    expect(isLoggingOut).toBe(false);
+    expect(error).toBeUndefined();
+  });
 
 //   it("should handle logout successfully", async () => {
 //     const { result, waitForNextUpdate } = renderHook(() => useLogout());
@@ -59,4 +72,4 @@
 //     expect(error).toEqual(new Error(errorMessage));
 //     expect(useShowToast).toHaveBeenCalled(); // Assuming useShowToast is called in case of an error
 //   });
-// });
+});

@@ -1,7 +1,7 @@
-// import { renderHook, act } from "@testing-library/react";
-// import useSearchUser from "../useSearchUser"; // Update the import path
+import { renderHook, act } from "@testing-library/react";
+import useSearchUser from "../useSearchUser"; // Update the import path
 
-// // Mock necessary dependencies
+// Mock necessary dependencies
 // jest.mock("react", () => ({
 //   ...jest.requireActual("react"),
 //   useState: jest.fn(),
@@ -18,19 +18,32 @@
 //   where: jest.fn(),
 // }));
 
-// describe("useSearchUser", () => {
-//   it("should initialize with correct initial state", () => {
-//     // Mock useState to return the initial state
-//     jest.spyOn(require("react"), "useState").mockImplementationOnce(() => [false, null, jest.fn()]);
+jest.mock('react-firebase-hooks/auth');
+jest.mock('../useShowToast');
+jest.mock('../../store/authStore');
 
-//     const { result } = renderHook(() => useSearchUser()); // Invoke the hook function
-//     const { isLoading, getUserProfile, user, setUser } = result.current;
+// Mock the necessary Firebase functions
+jest.mock('firebase/firestore', () => ({
+  ...jest.requireActual('firebase/firestore'),  // Use the actual implementation for other functions
+  getFirestore: jest.fn(() => ({
+    doc: jest.fn(),
+    getDoc: jest.fn(),
+  })),
+}));
 
-//     expect(isLoading).toBe(false);
-//     expect(typeof getUserProfile).toBe("function");
-//     expect(user).toBeNull();
-//     expect(typeof setUser).toBe("function");
-//   });
+describe("useSearchUser", () => {
+  it("should initialize with correct initial state", () => {
+    // Mock useState to return the initial state
+    jest.spyOn(require("react"), "useState").mockImplementationOnce(() => [false, null, jest.fn()]);
+
+    const { result } = renderHook(() => useSearchUser()); // Invoke the hook function
+    const { isLoading, getUserProfile, user, setUser } = result.current;
+
+    expect(isLoading).toBe(false);
+    expect(typeof getUserProfile).toBe("function");
+    expect(user).toBeNull();
+    expect(typeof setUser).toBe("function");
+  });
 
 //   it("should handle getting user details successfully", async () => {
 //     // Mock useState to return the initial state and update function
@@ -122,4 +135,4 @@
 //     expect(showToastMock).toHaveBeenCalledWith("Error", "Test error", "error");
 //     expect(result.current.user).toBeNull();
 //   });
-// });
+});

@@ -1,7 +1,7 @@
-// import { renderHook, act } from "@testing-library/react";
-// import { usePostComment } from "../usePostComment"; // Make sure to update the import path
+import { renderHook, act } from "@testing-library/react";
+import usePostComment from "../usePostComment"; // Make sure to update the import path
 
-// // Mock necessary dependencies
+// Mock necessary dependencies
 // jest.mock("react", () => ({
 //   ...jest.requireActual("react"),
 //   useState: jest.fn(),
@@ -24,17 +24,30 @@
 //   firestore: {},
 // }));
 
-// describe("usePostComment", () => {
-//   it("should initialize with correct initial state", () => {
-//     // Mock useState to return the initial state
-//     jest.spyOn(require("react"), "useState").mockImplementationOnce(() => [false, jest.fn()]);
+jest.mock('react-firebase-hooks/auth');
+jest.mock('../useShowToast');
+jest.mock('../../store/authStore');
 
-//     const { result } = renderHook(() => usePostComment());
-//     const { isCommenting, handlePostComment } = result.current;
+// Mock the necessary Firebase functions
+jest.mock('firebase/firestore', () => ({
+  ...jest.requireActual('firebase/firestore'),  // Use the actual implementation for other functions
+  getFirestore: jest.fn(() => ({
+    doc: jest.fn(),
+    getDoc: jest.fn(),
+  })),
+}));
 
-//     expect(isCommenting).toBe(false);
-//     expect(typeof handlePostComment).toBe("function");
-//   });
+describe("usePostComment", () => {
+  it("should initialize with correct initial state", () => {
+    // Mock useState to return the initial state
+    jest.spyOn(require("react"), "useState").mockImplementationOnce(() => [false, jest.fn()]);
+
+    const { result } = renderHook(() => usePostComment());
+    const { isCommenting, handlePostComment } = result.current;
+
+    expect(isCommenting).toBe(false);
+    expect(typeof handlePostComment).toBe("function");
+  });
 
 //   it("should handle posting a comment successfully", async () => {
 //     // Mock useState to return the initial state and update function
@@ -85,4 +98,4 @@
 //     expect(/* Check if addComment from post store was not called */).not.toHaveBeenCalled();
 //     expect(/* Check if arrayUnion from firestore was not called */).not.toHaveBeenCalled();
 //   });
-// });
+});
