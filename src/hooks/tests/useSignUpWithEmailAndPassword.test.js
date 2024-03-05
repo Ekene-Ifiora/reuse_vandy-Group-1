@@ -4,30 +4,7 @@ import {
   useCreateUserWithEmailAndPassword as firebaseUseCreateUserWithEmailAndPassword,
   AuthError as FirebaseAuthError,
 } from "react-firebase-hooks/auth";
-import { auth, firestore } from "../../firebase/firebase";
-import { setDoc as firestoreSetDoc } from "firebase/firestore";
 import useShowToast from "../useShowToast";
-import useAuthStore from "../../store/authStore";
-
-// jest.mock("react-firebase-hooks/auth", () => ({
-//   useCreateUserWithEmailAndPassword: jest.fn(),
-// }));
-
-// jest.mock("../../firebase/firebase", () => ({
-//   auth: {
-//     ...jest.requireActual("../../firebase/firebase").auth,
-//     createUserWithEmailAndPassword: jest.fn(),
-//   },
-//   firestore: {
-//     ...jest.requireActual("../../firebase/firebase").firestore,
-//     setDoc: jest.fn(),
-//   },
-// }));
-
-// jest.mock("../useShowToast", () => ({
-//   __esModule: true,
-//   default: jest.fn(),
-// }));
 
 jest.mock('react-firebase-hooks/auth');
 jest.mock('../useShowToast');
@@ -35,7 +12,7 @@ jest.mock('../../store/authStore');
 
 // Mock the necessary Firebase functions
 jest.mock('firebase/firestore', () => ({
-  ...jest.requireActual('firebase/firestore'),  // Use the actual implementation for other functions
+  ...jest.requireActual('firebase/firestore'),
   getFirestore: jest.fn(() => ({
     doc: jest.fn(),
     getDoc: jest.fn(),
@@ -57,12 +34,12 @@ describe("useSignUpWithEmailAndPassword", () => {
     fullName: "Test User",
   };
 
-  const mockUser = {
-    uid: "mockuid",
-    email: mockInputs.email,
-    username: mockInputs.username,
-    fullName: mockInputs.fullName,
-  };
+  // const mockUser = {
+  //   uid: "mockuid",
+  //   email: mockInputs.email,
+  //   username: mockInputs.username,
+  //   fullName: mockInputs.fullName,
+  // };
 
   it("should show an error toast when signup fails", async () => {
     const errorMock = FirebaseAuthError;
@@ -87,12 +64,5 @@ describe("useSignUpWithEmailAndPassword", () => {
         await result.current.signup(mockInputs);
       }
     });
-
-    // expect(createUserWithEmailAndPasswordMock).toHaveBeenCalledWith(
-    //   mockInputs.email,
-    //   mockInputs.password
-    // );
-
-    // expect(showToastMock).toHaveBeenCalledWith("Error", errorMock.message, "error");
   });
 });

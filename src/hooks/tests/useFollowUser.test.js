@@ -6,16 +6,14 @@ describe('useFollowUser', () => {
     it('should initialize with isUpdating set to false and isFollowing based on user data', () => {
         const { result } = renderHook(() => useFollowUser("testUserId"));
         expect(result.current.isUpdating).toBe(false);
-        
-        // Since isFollowing might be asynchronous or dependent on an external factor,
-        // you might need to wait for it to be initialized
+      
         waitFor(() => {
           expect(result.current.isFollowing).toBe(true);
         });
     });
 
   it('should handle following/unfollowing users successfully', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useFollowUser("testUserId"));
+    const { result } = renderHook(() => useFollowUser("testUserId"));
     const { handleFollowUser } = result.current;
 
     await act(async () => {
@@ -26,7 +24,7 @@ describe('useFollowUser', () => {
       await handleFollowUser();
     });
 
-    // After the follow/unfollow, isUpdating should be set to false
+    // After the isUpdating, isUpdating should be set to false
     expect(result.current.isUpdating).toBe(false);
   });
 

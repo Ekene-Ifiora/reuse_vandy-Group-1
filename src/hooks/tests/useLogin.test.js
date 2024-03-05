@@ -1,7 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { auth, firestore } from '../../firebase/firebase';
-import { doc, getDoc } from 'firebase/firestore';
 import useAuthStore from '../../store/authStore';
 import useShowToast from '../useShowToast';
 import useLogin from '../useLogin';
@@ -13,14 +11,12 @@ jest.mock('../../store/authStore');
 
 // Mock the necessary Firebase functions
 jest.mock('firebase/firestore', () => ({
-  ...jest.requireActual('firebase/firestore'),  // Use the actual implementation for other functions
+  ...jest.requireActual('firebase/firestore'),
   getFirestore: jest.fn(() => ({
     doc: jest.fn(),
     getDoc: jest.fn(),
   })),
 }));
-
-// Import and setup jest-localstorage-mock
 
 describe('useLogin', () => {
   // Mock the dependencies for the hook
@@ -52,26 +48,6 @@ describe('useLogin', () => {
     expect(mockShowToast).toHaveBeenCalledWith('Error', 'Please fill all the fields', 'error');
   });
 
-//   it('should handle successful login', async () => {
-//     const userCred = { user: { uid: 'user123' } };
-//     const docSnap = { data: jest.fn() };
-
-//     mockSignInWithEmailAndPassword.mockResolvedValue(userCred);
-//     doc.mockReturnValue(jest.fn());
-//     getDoc.mockResolvedValue(docSnap);
-
-//     const { result } = renderHook(() => useLogin());
-
-//     await act(async () => {
-//       await result.current.login({ email: 'johndoe@gmail.com', password: 'Password' });
-//     });
-
-//     expect(doc).toHaveBeenCalledWith(firestore, 'users', 'user123');
-//     expect(getDoc).toHaveBeenCalledWith('userDocRef');
-//     expect(localStorage.setItem).toHaveBeenCalledWith('user-info', JSON.stringify(docSnap.data()));
-//     expect(mockUseAuthStore).toHaveBeenCalledWith(docSnap.data());
-//   });
-
   it('should handle login failure and show an error toast', async () => {
     const error = { message: 'Authentication failed' };
 
@@ -87,7 +63,7 @@ describe('useLogin', () => {
   });
   // Clean up the global mock after all tests
   afterAll(() => {
-    jest.restoreAllMocks();  // This
+    jest.restoreAllMocks();
   });
 });
 

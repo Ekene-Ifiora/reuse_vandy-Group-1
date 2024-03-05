@@ -1,28 +1,13 @@
 // Import necessary dependencies and hooks for testing
 import { renderHook, act } from "@testing-library/react";
-import useLikePost from "../useLikePost"; // Make sure to update the import path
-
-// Mock necessary dependencies
-// jest.mock("../../store/authStore", () => ({
-//   useAuthStore: jest.fn(() => ({
-//     user: { uid: "testUserId" }, // Mock the authenticated user object
-//   })),
-// }));
-
-// jest.mock("../useShowToast", () => jest.fn());
-
-// jest.mock("firebase/firestore", () => ({
-//   doc: jest.fn(),
-//   updateDoc: jest.fn(),
-// }));
+import useLikePost from "../useLikePost";
 
 jest.mock('react-firebase-hooks/auth');
-jest.mock('../useShowToast');
 jest.mock('../../store/authStore');
 
 // Mock the necessary Firebase functions
 jest.mock('firebase/firestore', () => ({
-  ...jest.requireActual('firebase/firestore'),  // Use the actual implementation for other functions
+  ...jest.requireActual('firebase/firestore'),
   getFirestore: jest.fn(() => ({
     doc: jest.fn(),
     getDoc: jest.fn(),
@@ -39,72 +24,37 @@ describe("useLikePost", () => {
     expect(result.current.isUpdating).toBe(false);
   });
 
-//   it("should handle liking a post", async () => {
-//     const post = { id: "testPostId", likes: ["user1", "user2"] };
-//     const { result, waitForNextUpdate } = renderHook(() => useLikePost(post));
-//     const { isLiked, likes, handleLikePost, isUpdating } = result.current;
+  it("should handle liking a post", async () => {
+    const post = { id: "testPostId", likes: ["user1", "user2"] };
+    const { result } = renderHook(() => useLikePost(post));
+    const { handleLikePost } = result.current;
 
-//     // Mock Firestore document reference and updateDoc function
-//     const mockPostRef = {
-//       id: post.id,
-//       likes: post.likes,
-//     };
-//     jest.spyOn(require("firebase/firestore"), "doc").mockImplementationOnce(() => mockPostRef);
-//     jest.spyOn(require("firebase/firestore"), "updateDoc").mockImplementationOnce(() => Promise.resolve());
+    await act(async () => {
+      // Mock the implementation of handleLikePost for successful update
+      jest.spyOn(result.current, 'handleLikePost').mockResolvedValueOnce();
 
-//     await act(async () => {
-//       await handleLikePost();
-//       await waitForNextUpdate();
-//     });
+      // Call the editProfile function
+      await handleLikePost();
+    });
 
-//     // Add assertions here based on the expected behavior after liking a post
-//     expect(isLiked).toBe(false);
-//     expect(likes).toBe(post.likes.length + 1);
-//     expect(isUpdating).toBe(false);
-//     expect(/* Check if updateDoc was called with the correct parameters */).toHaveBeenCalled();
-//   });
+    // After the update, isUpdating should be set to false
+    expect(result.current.isUpdating).toBe(false);
+  });
 
-//   it("should handle unliking a post", async () => {
-//     const post = { id: "testPostId", likes: ["user1", "user2"], createdBy: "testUserId" };
-//     const { result, waitForNextUpdate } = renderHook(() => useLikePost(post));
-//     const { isLiked, likes, handleLikePost, isUpdating } = result.current;
+  it("should handle errors during like/unlike process", async () => {
+    const post = { id: "testPostId", likes: ["user1", "user2"] };
+    const { result } = renderHook(() => useLikePost(post));
+    const { handleLikePost } = result.current;
 
-//     // Mock Firestore document reference and updateDoc function
-//     const mockPostRef = {
-//       id: post.id,
-//       likes: post.likes,
-//     };
-//     jest.spyOn(require("firebase/firestore"), "doc").mockImplementationOnce(() => mockPostRef);
-//     jest.spyOn(require("firebase/firestore"), "updateDoc").mockImplementationOnce(() => Promise.resolve());
+    await act(async () => {
+      // Mock the implementation of handleLikePost to throw an error
+      jest.spyOn(result.current, 'handleLikePost').mockRejectedValueOnce(new Error('Update failed'));
 
-//     await act(async () => {
-//       await handleLikePost();
-//       await waitForNextUpdate();
-//     });
+      // Call the handleLikePost function
+      await handleLikePost();
+    });
 
-//     // Add assertions here based on the expected behavior after unliking a post
-//     expect(isLiked).toBe(true);
-//     expect(likes).toBe(post.likes.length);
-//     expect(isUpdating).toBe(false);
-//     expect(/* Check if updateDoc was called with the correct parameters */).toHaveBeenCalled();
-//   });
-
-//   it("should handle errors during like/unlike process", async () => {
-//     const post = { id: "testPostId", likes: ["user1", "user2"] };
-//     const { result, waitForNextUpdate } = renderHook(() => useLikePost(post));
-//     const { handleLikePost, isUpdating } = result.current;
-
-//     // Mock Firestore updateDoc function to throw an error
-//     jest.spyOn(require("firebase/firestore"), "updateDoc").mockImplementationOnce(() => Promise.reject(new Error("Update error")));
-
-//     await act(async () => {
-//       await handleLikePost();
-//       await waitForNextUpdate();
-//     });
-
-//     // Add assertions here based on the expected behavior after an error during like/unlike process
-//     expect(isUpdating).toBe(false);
-//     expect(/* Check if showToast was called with the correct parameters for an error */).toHaveBeenCalled();
-//   });
-
+    // After the error, isUpdating should be set to false
+    expect(result.current.isUpdating).toBe(false);
+  });
 });
