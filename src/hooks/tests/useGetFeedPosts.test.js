@@ -1,40 +1,53 @@
 // import { renderHook, act } from "@testing-library/react";
-// import { useGetFeedPosts } from "../useGetFeedPosts";
+// import useGetFeedPosts from "../useGetFeedPosts";
 
 // // Mock necessary dependencies
-// jest.mock("../../store/postStore", () => ({
-//   __esModule: true,
-//   default: jest.fn(() => ({
-//     posts: [],
-//     setPosts: jest.fn(),
-//   })),
-// }));
-// jest.mock("../../store/authStore", () => ({
-//   __esModule: true,
-//   default: jest.fn(() => ({
-//     user: { uid: "testUserId" },
-//   })),
-// }));
-// jest.mock("../useShowToast", () => jest.fn());
-// jest.mock("../../store/userProfileStore", () => ({
-//   __esModule: true,
-//   default: jest.fn(() => ({
-//     setUserProfile: jest.fn(),
-//   })),
-// }));
-// jest.mock("firebase/app", () => ({
-//   __esModule: true,
-//   initializeApp: jest.fn(),
-//   getAuth: jest.fn(),
-//   getFirestore: jest.fn(),
-//   getStorage: jest.fn(),
-// }));
-// jest.mock("firebase/firestore", () => ({
-//   collection: jest.fn(),
-//   query: jest.fn(),
-//   where: jest.fn(),
-//   getDocs: jest.fn(),
-// }));
+// // jest.mock("../../store/postStore", () => ({
+// //   __esModule: true,
+// //   default: jest.fn(() => ({
+// //     posts: [],
+// //     setPosts: jest.fn(),
+// //   })),
+// // }));
+
+// // jest.mock("../../store/authStore", () => ({
+// //   __esModule: true,
+// //   default: jest.fn(() => ({
+// //     user: { uid: "testUserId" },
+// //   })),
+// // }));
+
+// // jest.mock("../useShowToast", () => jest.fn());
+
+// // jest.mock("../../store/userProfileStore", () => ({
+// //   __esModule: true,
+// //   default: jest.fn(() => ({
+// //     setUserProfile: jest.fn(),
+// //   })),
+// // }));
+
+// // jest.mock("firebase/app", () => ({
+// //   __esModule: true,
+// //   initializeApp: jest.fn(),
+// //   getAuth: jest.fn(() => ({
+// //     onAuthStateChanged: jest.fn(),
+// //   })),
+// //   getFirestore: jest.fn(() => ({
+// //     collection: jest.fn(),
+// //     query: jest.fn(),
+// //     where: jest.fn(),
+// //     getDocs: jest.fn(() => ({ forEach: jest.fn() })),
+// //   })),
+// //   getStorage: jest.fn(() => ({})),
+// // }));
+
+// // jest.mock("firebase/firestore", () => ({
+// //   __esModule: true,
+// //   collection: jest.fn(),
+// //   query: jest.fn(),
+// //   where: jest.fn(),
+// //   getDocs: jest.fn(),
+// // }));
 
 // describe("useGetFeedPosts", () => {
 //   it("should initialize with isLoading set to true", () => {
@@ -50,24 +63,21 @@
 //     const mockQuerySnapshot = {
 //       forEach: jest.fn(),
 //     };
-//     jest.spyOn(mockQuerySnapshot, "forEach").mockImplementation((callback) => {
-//       // Mock each document in the snapshot
-//       const mockDoc = { id: "postId", data: jest.fn(() => ({ createdAt: Date.now() })) };
+
+//     // Mock each document in the snapshot
+//     const mockDoc = { id: "postId", data: jest.fn(() => ({ createdAt: Date.now() })) };
+//     mockQuerySnapshot.forEach.mockImplementation((callback) => {
 //       callback(mockDoc);
 //     });
 
-//     jest.spyOn(console, "error").mockImplementation(() => {});
-
 //     // Mock Firestore getDocs function to return the mock query snapshot
-//     jest.spyOn(require("firebase/firestore"), "getDocs").mockImplementationOnce(() => Promise.resolve(mockQuerySnapshot));
+//     jest.spyOn(require("firebase/firestore"), "getDocs").mockResolvedValueOnce(mockQuerySnapshot);
 
-//     await act(async () => {
-//       await waitForNextUpdate();
-//     });
+//     // await waitForNextUpdate();
 
-//     // Assertions after fetching feed posts
-//     expect(isLoading).toBe(false);
-//     expect(setPosts).toHaveBeenCalledWith([{ id: "postId", createdAt: expect.any(Number) }]);
+//     // // Assertions after fetching feed posts
+//     // expect(isLoading).toBe(false);
+//     // expect(setPosts).toHaveBeenCalledWith([{ id: "postId", createdAt: expect.any(Number) }]);
 //   });
 
 //   it("should handle errors during feed posts fetch", async () => {
@@ -75,11 +85,9 @@
 //     const { isLoading, showToast } = result.current;
 
 //     // Mock Firestore getDocs function to throw an error
-//     jest.spyOn(require("firebase/firestore"), "getDocs").mockImplementationOnce(() => Promise.reject(new Error("Fetch error")));
+//     jest.spyOn(require("firebase/firestore"), "getDocs").mockRejectedValueOnce(new Error("Fetch error"));
 
-//     await act(async () => {
-//       await waitForNextUpdate();
-//     });
+//     await waitForNextUpdate();
 
 //     // Assertions after an error during fetch
 //     expect(isLoading).toBe(false);

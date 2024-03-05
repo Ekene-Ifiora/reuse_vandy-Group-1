@@ -1,6 +1,5 @@
-// // Import necessary dependencies and hooks for testing
 // import { renderHook, act } from "@testing-library/react";
-// import { useGetUserPosts } from "../useGetUserPosts"; // Make sure to update the import path
+// import { useGetUserPosts } from "../useGetUserPosts";
 
 // // Mock necessary dependencies
 // jest.mock("../../store/postStore", () => ({
@@ -14,7 +13,7 @@
 // jest.mock("../../store/userProfileStore", () => ({
 //   __esModule: true,
 //   default: jest.fn(() => ({
-//     userProfile: { uid: "testUserId", /* Add other necessary properties */ },
+//     userProfile: { uid: "testUserId" },
 //   })),
 // }));
 // jest.mock("firebase/firestore", () => ({
@@ -32,7 +31,7 @@
 
 //   it("should fetch user-specific posts successfully", async () => {
 //     const { result, waitForNextUpdate } = renderHook(() => useGetUserPosts());
-//     const { isLoading, posts } = result.current;
+//     const { isLoading, posts, setPosts } = result.current;
 
 //     // Mock Firestore query and snapshot data
 //     const mockQuerySnapshot = {
@@ -51,15 +50,15 @@
 //       await waitForNextUpdate();
 //     });
 
-//     // Add assertions here based on the expected behavior after fetching user-specific posts
+//     // Assertions after fetching user-specific posts
 //     expect(isLoading).toBe(false);
-//     expect(/* Check if setPosts was called with the correct data */).toHaveBeenCalled();
+//     expect(setPosts).toHaveBeenCalledWith([{ id: "postId", createdAt: expect.any(Number) }]);
 //     expect(posts.length).toBeGreaterThan(0); // Assuming user-specific posts are present
 //   });
 
 //   it("should handle errors during user-specific posts fetch", async () => {
 //     const { result, waitForNextUpdate } = renderHook(() => useGetUserPosts());
-//     const { isLoading } = result.current;
+//     const { isLoading, showToast } = result.current;
 
 //     // Mock Firestore getDocs function to throw an error
 //     jest.spyOn(require("firebase/firestore"), "getDocs").mockImplementationOnce(() => Promise.reject(new Error("Fetch error")));
@@ -68,9 +67,8 @@
 //       await waitForNextUpdate();
 //     });
 
-//     // Add assertions here based on the expected behavior after an error during fetch
+//     // Assertions after an error during fetch
 //     expect(isLoading).toBe(false);
-//     expect(/* Check if showToast was called with the correct parameters for an error */).toHaveBeenCalled();
+//     expect(showToast).toHaveBeenCalledWith("Error fetching user-specific posts", "error");
 //   });
-
 // });

@@ -10,7 +10,7 @@ describe('useFollowUser', () => {
         // Since isFollowing might be asynchronous or dependent on an external factor,
         // you might need to wait for it to be initialized
         waitFor(() => {
-          expect(result.current.isFollowing).toBe(/* true or false based on user data */);
+          expect(result.current.isFollowing).toBe(true);
         });
     });
 
