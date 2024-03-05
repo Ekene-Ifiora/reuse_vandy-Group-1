@@ -100,8 +100,8 @@ const ProductInfo = ({ open, onClose, item }) => {
             <Heading as="h3" size="md" align='center'>
               Seller Information
             </Heading>
-            <Text marginLeft={2}>Seller: John Doe </Text> {/* fixme pass sellername */}
-            <Text marginLeft={2}>Contact email: exampleseller@email.com</Text> {/* fixme pass selleremail */}
+            <Text marginLeft={2}>Seller: {item.sellerName} </Text>
+            <Text marginLeft={2}>Contact email: {item.sellerEmail}</Text>
             <Button mt={4} colorScheme="teal" marginLeft={145} marginBottom={2}>
               Contact Seller
             </Button>
