@@ -26,7 +26,6 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 
 const ProductInfo = ({ open, onClose, item }) => {
-  console.log(item.id);
   if (!open) return null;
   return (
     // <ChakraProvider>

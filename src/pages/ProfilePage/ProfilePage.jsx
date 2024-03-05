@@ -57,7 +57,7 @@ const ProfilePage = () => {
         <Navigation showProfileIcon={false} showHomeIcon={true} />
       </div>
 
-      <Container maxW="container.lg" py={5} pt='60px'>
+      <Container maxW="container.lg" py={5} pt="60px">
         <Flex
           position="relative"
           py={10}

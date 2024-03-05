@@ -61,6 +61,7 @@ const useSignUpWithEmailAndPassword = () => {
           chats: [],
           friends: [],
           createdAt: Date.now(),
+          cart:[],
         };
         await setDoc(doc(firestore, "users", newUser.user.uid), userDoc);
         localStorage.setItem("user-info", JSON.stringify(userDoc));

@@ -1,6 +1,14 @@
 import { useState } from "react";
 import useShowToast from "./useShowToast";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  union,
+  orderBy,
+  or,
+} from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 
 const useSearchProduct = () => {
@@ -12,10 +20,27 @@ const useSearchProduct = () => {
     setIsLoading(true);
     setItem(null);
     try {
-      const q = query(
+      var q = [];
+      const q1 = query(
         collection(firestore, "posts"),
-        where("name", ">=", itemName)
+        where("name", "==", itemName)
       );
+      const q2 = query(
+        collection(firestore, "posts"),
+        where("tags", "==", itemName)
+      );
+
+      if (!q1.empty) {
+        q = q1;
+      } else if (!q2.empty) {
+        console.log(itemName);
+        q = q2;
+      } else {
+        q = [];
+      }
+
+      // Combine the queries using the logical OR operator
+      q = q1.empty ? q2 : q1;
 
       const querySnapshot = await getDocs(q);
       if (querySnapshot.empty)
