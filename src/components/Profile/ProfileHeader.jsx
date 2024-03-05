@@ -15,7 +15,8 @@ import EditProfile from "./EditProfile";
 import useFollowUser from "../../hooks/useFollowUser";
 
 const ProfileHeader = () => {
-  const { userProfile } = useUserProfileStore();
+  const userProfile = useUserProfileStore((state) => state.userProfile)
+  // const { userProfile } = useUserProfileStore();
   const authUser = useAuthStore((state) => state.user);
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const { isFollowing, isUpdating, handleFollowUser } = useFollowUser(userProfile?.uid);

@@ -4,17 +4,11 @@ import ProfilePost from "./ProfilePost";
 import useGetUserPosts from "../../hooks/useGetUserPosts";
 
 const ProfilePosts = () => {
-	// const { isLoading, posts } = useGetUserPosts();
+	const { isLoading, posts } = useGetUserPosts();
 
-	// const noPostsFound = !isLoading && posts.length === 0;
-	// if (noPostsFound) return <NoPostsFound />;
-	const [isLoading, setIsLoading] = useState(true)
-
-	useEffect(() => {
-		setTimeout(() => {
-			setIsLoading(false)
-		}, 2000) 
-	}, [])
+	const noPostsFound = !isLoading && posts.length === 0;
+	if (noPostsFound) return <NoPostsFound />;
+	
 
 	return (
 	<ChakraProvider>
@@ -37,9 +31,9 @@ const ProfilePosts = () => {
 
 			{!isLoading && (
 				<>
-					<ProfilePost img='/img2.png' /> 
-					<ProfilePost img='/img2.png' /> 
-					<ProfilePost img='/img2.png' /> 
+					{posts.map((post) => (
+						<ProfilePost post={post} key={post.id} />
+					))}
 				</>
 			)}
 		</Grid>
@@ -49,10 +43,10 @@ const ProfilePosts = () => {
 
 export default ProfilePosts;
 
-// const NoPostsFound = () => {
-// 	return (
-// 		<Flex flexDir='column' textAlign={"center"} mx={"auto"} mt={10}>
-// 			<Text fontSize={"2xl"}>No Posts Found🤔</Text>
-// 		</Flex>
-// 	);
-// };
+const NoPostsFound = () => {
+	return (
+		<Flex flexDir='column' textAlign={"center"} mx={"auto"} mt={10}>
+			<Text fontSize={"2xl"}>No Posts Found🤔</Text>
+		</Flex>
+	);
+};
