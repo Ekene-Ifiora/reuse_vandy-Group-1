@@ -72,7 +72,7 @@ const SearchProducts = () => {
             <form onSubmit={handleSearchProduct}>
               <FormControl>
                 <FormLabel>Item Name</FormLabel>
-                <Input placeholder="Refrigerator" ref={searchRef} />
+                <Input placeholder="Username, Item, Tags" ref={searchRef} />
               </FormControl>
 
               <Flex w={"full"} justifyContent={"flex-end"}>

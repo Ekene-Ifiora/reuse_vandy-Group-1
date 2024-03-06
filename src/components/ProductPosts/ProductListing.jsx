@@ -3,10 +3,13 @@ import product_card from "../db/data_1";
 import "./ProductListing.css";
 import useGetFeedPosts from "../../hooks/useGetFeedPosts";
 import ProductInfo from "./ProductInfo";
+import useAddCart from "../../hooks/useAddCart";
 
 const ProductListing = () => {
   var { isLoading, posts } = useGetFeedPosts();
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const { handleAddCart, isLiked, likes } = useAddCart();
+
   if (posts.length < 15 || isLoading) {
     posts = product_card;
   }
@@ -33,7 +36,9 @@ const ProductListing = () => {
           {item.buyNowPrice}
           <span>{"$"}</span>
         </p>
-        <div className="btn">Add to cart</div>
+        <div className="btn" onClick={(e) => handleAddCart(item)}>
+          Add to cart
+        </div>
       </div>
     </div>
   ));

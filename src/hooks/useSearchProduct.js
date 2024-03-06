@@ -1,7 +1,15 @@
 // Import React hooks and functions from external files and Firebase SDK
 import { useState } from "react";
 import useShowToast from "./useShowToast";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  union,
+  orderBy,
+  or,
+} from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 
 // Define a custom React hook named useSearchProduct
@@ -20,13 +28,28 @@ const useSearchProduct = () => {
     setItem(null);
 
     try {
-      // Create a Firestore query to search for items with names greater than or equal to the provided itemName
-      const q = query(
+      var q = [];
+      const q1 = query(
         collection(firestore, "posts"),
-        where("name", ">=", itemName)
+        where("name", "==", itemName)
+      );
+      const q2 = query(
+        collection(firestore, "posts"),
+        where("tags", "==", itemName)
       );
 
-      // Fetch items from Firestore based on the query
+      if (!q1.empty) {
+        q = q1;
+      } else if (!q2.empty) {
+        console.log(itemName);
+        q = q2;
+      } else {
+        q = [];
+      }
+
+      // Combine the queries using the logical OR operator
+      q = q1.empty ? q2 : q1;
+
       const querySnapshot = await getDocs(q);
 
       // Show an error toast if no items are found with the given name

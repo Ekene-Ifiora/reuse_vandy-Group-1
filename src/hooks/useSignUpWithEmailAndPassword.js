@@ -79,6 +79,7 @@ const useSignUpWithEmailAndPassword = () => {
           chats: [],
           friends: [],
           createdAt: Date.now(),
+          cart:[],
         };
 
         // Set the user document in Firestore

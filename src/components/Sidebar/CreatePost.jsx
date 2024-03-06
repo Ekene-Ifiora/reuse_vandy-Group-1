@@ -14,6 +14,7 @@ import {
   Textarea,
   Tooltip,
   useDisclosure,
+  Select,
 } from "@chakra-ui/react";
 import { BsFillImageFill } from "react-icons/bs";
 import { useRef, useState } from "react";
@@ -45,7 +46,6 @@ const CreatePost = () => {
     location: "",
     sellerName: "",
     sellerEmail: "",
-    likes: [],
     comments: [],
     createdAt: Date.now(),
     createdBy: "",
@@ -90,22 +90,23 @@ const CreatePost = () => {
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
 
-        <ModalContent bg={"black"} border={"1px solid gray"}>
-          <ModalHeader color="white">Create Post</ModalHeader>
-          <ModalCloseButton color={"white"} />
+        <ModalContent
+          bg={"white"}
+          border={"1px solid gray"}
+          boxShadow={"xl"}
+          mx={3}
+          color={"black"}
+        >
+          <ModalHeader color="black">Create Post</ModalHeader>
+          <ModalCloseButton color={"black"} />
           <ModalBody pb={6}>
             <Textarea
               placeholder="Item Name"
               value={inputs.name}
               onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
               required={true}
-              color="white"
-            />
-            <Textarea
-              placeholder="Tags"
-              value={inputs.tags}
-              onChange={(e) => setInputs({ ...inputs, tags: e.target.value })}
-              color="white"
+              color="black"
+              marginBottom={"5px"}
             />
             <Textarea
               placeholder="Description"
@@ -113,16 +114,33 @@ const CreatePost = () => {
               onChange={(e) =>
                 setInputs({ ...inputs, description: e.target.value })
               }
-              color="white"
+              color="black"
+              marginBottom={"5px"}
             />
-            <Textarea
-              placeholder="Location"
+            <Select
+              placeholder={"Select Tags"}
+              value={inputs.tags}
+              onChange={(e) => setInputs({ ...inputs, tags: e.target.value })}
+              marginBottom={"5px"}
+            >
+              <option value="Electronics">Electronics</option>
+              <option value="Tickets">Tickets</option>
+              <option value="Furniture">Furniture</option>
+            </Select>
+            <Select
+              placeholder="Select Location"
               value={inputs.location}
               onChange={(e) =>
                 setInputs({ ...inputs, location: e.target.value })
               }
-              color="white"
-            />
+              marginBottom={"5px"}
+            >
+              <option value="Kissam College">Kissam College</option>
+              <option value="Commons">Commons</option>
+              <option value="Highland">Highland</option>
+              <option value="EBI">EBI</option>
+              <option value="Rothschild">Rothschild</option>
+            </Select>
             <Input
               type="number"
               placeholder="Price"
@@ -130,7 +148,7 @@ const CreatePost = () => {
               onChange={(e) =>
                 setInputs({ ...inputs, buyNowPrice: e.target.value })
               }
-              color="white"
+              color="black"
             />
             <Input
               type="file"
@@ -147,7 +165,7 @@ const CreatePost = () => {
                 cursor: "pointer",
               }}
               size={16}
-              color="white"
+              color="black"
             />
 
             {selectedFile && (
@@ -193,6 +211,8 @@ function useCreatePost() {
 
   const handleCreatePost = async (selectedFile, inputs) => {
     if (isLoading) return;
+    inputs.sellerName = authUser.fullName;
+    inputs.sellerEmail = authUser.email;
     if (!inputs.name) throw new Error("Please input item name");
     if (!inputs.buyNowPrice) throw new Error("Please input item price");
     if (!selectedFile) throw new Error("Please select an image");
@@ -213,7 +233,6 @@ function useCreatePost() {
       await updateDoc(postDocRef, { imageURL: downloadURL });
 
       newPost.imageURL = downloadURL;
-      console.log("authuserid: " + authUser.uid);
       if (authUser.uid) {
         createPost({ ...newPost, id: postDocRef.id });
       }
