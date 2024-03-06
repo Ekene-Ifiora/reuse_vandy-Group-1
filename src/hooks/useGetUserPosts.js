@@ -1,3 +1,4 @@
+// Import React hooks and functions from external files and Firebase SDK
 import { useEffect, useState } from "react";
 import usePostStore from "../store/postStore";
 import useShowToast from "./useShowToast";
@@ -5,41 +6,65 @@ import useUserProfileStore from "../store/userProfileStore";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 
+// Define a custom React hook named useGetUserPosts
 const useGetUserPosts = () => {
-	const [isLoading, setIsLoading] = useState(true);
-	const { posts, setPosts } = usePostStore();
-	const showToast = useShowToast();
-	const userProfile = useUserProfileStore((state) => state.userProfile);
+  // State variables to manage loading status and store user posts
+  const [isLoading, setIsLoading] = useState(true);
+  const { posts, setPosts } = usePostStore();
 
-	useEffect(() => {
-		const getPosts = async () => {
-			if (!userProfile) return;
-			setIsLoading(true);
-			setPosts([]);
+  // Access user profile information and update functions from custom stores
+  const showToast = useShowToast();
+  const userProfile = useUserProfileStore((state) => state.userProfile);
 
-			try {
-				const q = query(collection(firestore, "posts"), where("createdBy", "==", userProfile.uid));
-				const querySnapshot = await getDocs(q);
+  // useEffect to fetch user-specific posts when the userProfile changes
+  useEffect(() => {
+    // Define an asynchronous function to fetch user-specific posts
+    const getPosts = async () => {
+      // Return if userProfile is not available
+      if (!userProfile) return;
 
-				const posts = [];
-				querySnapshot.forEach((doc) => {
-					posts.push({ ...doc.data(), id: doc.id });
-				});
+      // Set loading state to true before starting the fetch
+      setIsLoading(true);
+      // Clear existing posts in the local state
+      setPosts([]);
 
-				posts.sort((a, b) => b.createdAt - a.createdAt);
-				setPosts(posts);
-			} catch (error) {
-				showToast("Error", error.message, "error");
-				setPosts([]);
-			} finally {
-				setIsLoading(false);
-			}
-		};
+      try {
+        // Create a Firestore query to get posts created by the user
+        const q = query(collection(firestore, "posts"), where("createdBy", "==", userProfile.uid));
 
-		getPosts();
-	}, [setPosts, userProfile, showToast]);
+        // Fetch user-specific posts from Firestore using the query
+        const querySnapshot = await getDocs(q);
 
-	return { isLoading, posts };
+        // Initialize an array to store the fetched user-specific posts
+        const fetchedPosts = [];
+
+        // Iterate through the query snapshot and populate the fetchedPosts array
+        querySnapshot.forEach((doc) => {
+          fetchedPosts.push({ ...doc.data(), id: doc.id });
+        });
+
+        // Sort user-specific posts based on createdAt timestamp in descending order
+        fetchedPosts.sort((a, b) => b.createdAt - a.createdAt);
+
+        // Update the local state with the fetched user-specific posts
+        setPosts(fetchedPosts);
+      } catch (error) {
+        // Show an error toast if an error occurs during the fetch process and clear existing posts
+        showToast("Error", error.message, "error");
+        setPosts([]);
+      } finally {
+        // Set loading state back to false after the fetch is complete or if an error occurred
+        setIsLoading(false);
+      }
+    };
+
+    // Call the getPosts function when the userProfile changes
+    getPosts();
+  }, [setPosts, userProfile, showToast]);
+
+  // Return loading state and the fetched user-specific posts for external use
+  return { isLoading, posts };
 };
 
+// Export the useGetUserPosts hook for use in other components
 export default useGetUserPosts;

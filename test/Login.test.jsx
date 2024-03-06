@@ -1,9 +1,9 @@
-import { describe, expect, test } from 'vitest'
-import { fireEvent, render, screen, act } from '@testing-library/react'
-import { userEvent } from '@testing-library/user-event'
+import { describe, expect, test } from 'vitest';
+import { fireEvent, render, screen, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Test from '../src/components/AuthForm/test'
-import Login from '../src/components/AuthForm/Login'
+import userEvent from '@testing-library/user-event';
+import Test from '../src/components/AuthForm/test';
+import Login from '../src/components/AuthForm/Login';
 
 describe('Test React Works', () => {
     test('render app', () => {
@@ -26,70 +26,63 @@ describe('Login Screen Tests', () => {
         expect(forgotPassword).toBeDefined();
     });
 
-    // test('changes', async () => {
-    //     render(<Login/>);
-    //     const password = screen.getByPlaceholderText(/password/i);
+    test('changes', async () => {
+        render(<Login/>);
+        const password = screen.getByPlaceholderText(/password/i);
 
-    //     act(() => {
-    //         fireEvent.change(password, { target: { value: 'newPassword123' } });
-    //         expect(password.value).toBe('newPassword123');
+        act(() => {
+            fireEvent.change(password, { target: { value: 'newPassword123' } });
+            expect(password.value).toBe('newPassword123');
 
-    //         const email = screen.getByPlaceholderText(/email/i);
-    //         fireEvent.change(email, { target: { value: '@gm' } });
-    //         expect(email.value).toBe('@gm');
-    //     });
-    // });
+            const email = screen.getByPlaceholderText(/email/i);
+            fireEvent.change(email, { target: { value: '@gm' } });
+            expect(email.value).toBe('@gm');
+        });
+    });
 
-    // test('hit enter bad', async () => {
-    //     render(<Login/>);
-    //     const password = screen.getByPlaceholderText(/password/i);
-    //     expect(password).toBeDefined();
+    test('hit enter bad', async () => {
+        render(<Login/>);
+        const password = screen.getByPlaceholderText(/password/i);
+        expect(password).toBeDefined();
 
-    //     await act(async () => {
-    //         fireEvent.change(password, { target: { value: 'wrong' } });
+        await act(async () => {
+            fireEvent.change(password, { target: { value: 'wrong' } });
 
-    //         const email = screen.getByPlaceholderText(/email/i);
-    //         fireEvent.change(email, { target: { value: 'johndoe@gmail.co' } });
+            const email = screen.getByPlaceholderText(/email/i);
+            fireEvent.change(email, { target: { value: 'johndoe@gmail.co' } });
     
-    //         const button = screen.getByRole('button', { name: /Sign In/i });
-    //         expect(button).toBeDefined();
+            const button = screen.getByRole('button', { name: /Sign In/i });
+            expect(button).toBeDefined();
     
-    //         await userEvent.click(button);
+            userEvent.click(button);
     
-    //         const error = screen.findByText(/Firebase:/i);
-    //         expect(error).toBeDefined();
-    //     });
-    // });
+            const error = screen.findByText(/Firebase:/i);
+            expect(error).toBeDefined();
+        });
+    });
 
-    // test('hit enter good', async () => {
-    //     render(<Login/>);
-    //     const password = screen.getByPlaceholderText(/password/i);
-    //     expect(password).toBeDefined();
+    test('hit enter good', async () => {
+        render(<Login/>);
+        const password = screen.getByPlaceholderText(/password/i);
+        expect(password).toBeDefined();
+        const button = screen.getByRole('button', { name: /Sign In/i });
       
-    //     act(async () => {
-    //         fireEvent.change(password, { target: { value: 'Password' } });
+        act(() => {
+            fireEvent.change(password, { target: { value: 'Password' } });
       
-    //         const email = screen.getByPlaceholderText(/email/i);
-    //         fireEvent.change(email, { target: { value: 'johndoe@gmail.com' } });
+            const email = screen.getByPlaceholderText(/email/i);
+            fireEvent.change(email, { target: { value: 'johndoe@gmail.com' } });
 
-    //         const button = screen.getByRole('button', { name: /Sign In/i });
-    //         expect(button).toBeDefined();
-    //         expect(button).toBeInTheDocument();
+            expect(button).toBeDefined();
+            expect(button).toBeInTheDocument();
 
-    //         const error = screen.queryByText(/Firebase:/i);
-    //         expect(error).not.toBeInTheDocument();
-      
-    //         await userEvent.click(button);
-    //         const error2 = screen.getByText(/Firebase:/i);
-    //         expect(error2).not.toBeInTheDocument();
+            const error = screen.queryByText(/Firebase:/i);
+            expect(error).not.toBeInTheDocument();
 
-    //         const password2 = screen.queryByText(/password/i);
-    //         expect(password2).not.toBeInTheDocument();
-      
-    //         const search = screen.getByText(/enter your search item/i);
-    //         expect(search).toBeDefined();
+            fireEvent.click(button);
 
-    //         expect(button).not.toBeInTheDocument();
-    //     });
-    //   });
+            const error2 = screen.queryByText(/Firebase:/i);
+            expect(error2).not.toBeInTheDocument();
+        });
+    });
 });
