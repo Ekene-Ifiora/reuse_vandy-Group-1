@@ -46,7 +46,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "concurrently \"npm run backend\" && \"npm run frontend\"",
+    "test": "concurrently \"npm run backend\" \"npm run frontend\"",
     "eject": "react-scripts eject",
     "backend": "jest",
     "frontend": "vitest"
