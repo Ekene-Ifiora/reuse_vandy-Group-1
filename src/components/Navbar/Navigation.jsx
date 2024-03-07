@@ -50,9 +50,6 @@ const Navigation = ({
           {showProfileIcon && (
             <CgProfile onClick={goToProfile} className="nav-icons" />
           )}
-          {/* <Link to={`/${authUser.username}`}>
-            <CgProfile className="nav-icons" />
-          </Link> */}
         </div>
         <div className="home">
           {showHomeIcon && (
@@ -60,7 +57,7 @@ const Navigation = ({
           )}
         </div>
         <div className="cart">
-          <IoCartOutline className="nav-icons" />
+          <IoCartOutline onClick={goToProfile} className="nav-icons" />
         </div>
         <div className="chat">
           <IoChatboxEllipsesOutline className="nav-icons" />

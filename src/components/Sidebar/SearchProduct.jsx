@@ -22,11 +22,15 @@ import SuggestedProduct from "../SuggestedUsers/SuggestedProduct";
 const SearchProducts = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const searchRef = useRef(null);
-  const { item, isLoading, getItemDetails, setItem } = useSearchProduct();
+  const { items, isLoading, getItemDetails, setItem } = useSearchProduct();
 
   const handleSearchProduct = (e) => {
     e.preventDefault();
     getItemDetails(searchRef.current.value);
+  };
+  const handleCloseModal = () => {
+    onClose(); // Close the modal
+    setItem([]); // Clear the search results
   };
 
   return (
@@ -58,7 +62,11 @@ const SearchProducts = () => {
         </Flex>
       </Tooltip>
 
-      <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInLeft">
+      <Modal
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+        motionPreset="slideInLeft"
+      >
         <ModalOverlay />
         <ModalContent
           bg={"black"}
@@ -87,7 +95,7 @@ const SearchProducts = () => {
                 </Button>
               </Flex>
             </form>
-            {item && <SuggestedProduct item={item} setItem={setItem} />}
+            {items && <SuggestedProduct items={items} setItem={setItem} />}
           </ModalBody>
         </ModalContent>
       </Modal>
