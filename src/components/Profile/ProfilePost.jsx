@@ -210,6 +210,7 @@ import usePostStore from "../../store/postStore";
 import { deleteObject, ref } from "firebase/storage";
 import { firestore, storage } from "../../firebase/firebase";
 import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { FaDollarSign } from "react-icons/fa6";
 
 export const ProfilePost = ({ post }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -272,16 +273,16 @@ export const ProfilePost = ({ post }) => {
           >
             <Flex alignItems={"center"} justifyContent={"center"} gap={50}>
               <Flex>
-                <AiFillHeart size={20} />
-                <Text fontWeight={"bold"} ml={2}>
-                  {post.likes.length}
+                <FaDollarSign size={20} color={"white"}/>
+                <Text fontWeight={"bold"} ml={2} color={"white"}>
+                  {post.buyNowPrice}
                 </Text>
               </Flex>
 
               <Flex>
-                <FaComment size={20} />
-                <Text fontWeight={"bold"} ml={2}>
-                {post.comments.length}
+                <FaComment size={20} color={"white"}/>
+                <Text fontWeight={"bold"} ml={2} color={"white"}>
+                  {post.comments.length}
                 </Text>
               </Flex>
             </Flex>
