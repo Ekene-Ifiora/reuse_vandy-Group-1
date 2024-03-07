@@ -19,11 +19,11 @@ describe("useSearchProduct", () => {
     jest.spyOn(require("react"), "useState").mockImplementationOnce(() => [false, null, jest.fn()]);
 
     const { result } = renderHook(() => useSearchProduct());
-    const { isLoading, getItemDetails, item, setItem } = result.current;
+    const { isLoading, getItemDetails, items, setItem } = result.current;
 
     expect(isLoading).toBe(false);
     expect(typeof getItemDetails).toBe("function");
-    expect(item).toBeNull();
+    expect(items).toStrictEqual([]);
     expect(typeof setItem).toBe("function");
   });
 
