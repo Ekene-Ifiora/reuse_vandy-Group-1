@@ -51,7 +51,7 @@
     "test": "concurrently \"npm run backend\" \"npm run frontend\"",
     "eject": "react-scripts eject",
     "backend": "jest --coverage",
-    "stop": "node kill-node-processes.js",
+    "stop": "pkill -f 'react-scripts-start'",
     "frontend": "concurrently \"npm start\" \"npx wait-on http://localhost:3000 && npx cypress run && npm run stop\"",
     "cypressUI": "concurrently \"npm start\" \"npx wait-on http://localhost:3000 && npx cypress open\""
   },

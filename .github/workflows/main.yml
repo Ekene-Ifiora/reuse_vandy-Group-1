@@ -30,6 +30,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: pkill set up
+      run: |
+        sudo apt-get update
+        sudo apt-get install psmisc
+
     - name: Checkout Repository
       uses: actions/checkout@v2
 
