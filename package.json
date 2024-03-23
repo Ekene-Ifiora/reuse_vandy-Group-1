@@ -21,6 +21,7 @@
     "babel-jest": "^29.7.0",
     "chai": "^5.1.0",
     "concurrently": "^8.2.2",
+    "cypress": "^13.7.1",
     "esm": "^3.2.25",
     "firebase": "^10.8.0",
     "framer-motion": "^11.0.5",
@@ -48,8 +49,9 @@
     "build": "react-scripts build",
     "test": "concurrently \"npm run backend\" \"npm run frontend\"",
     "eject": "react-scripts eject",
-    "backend": "jest",
-    "frontend": "vitest"
+    "backend": "jest --coverage",
+    "frontend": "concurrently \"npm start\" \"npx wait-on http://localhost:3000 && npx cypress run\"",
+    "cypressUI": "concurrently \"npm start\" \"npx wait-on http://localhost:3000 && npx cypress open\""
   },
   "eslintConfig": {
     "extends": [
