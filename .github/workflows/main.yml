@@ -17,6 +17,11 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16
+    
+    - name: pkill set up
+      run: |
+        sudo apt-get update
+        sudo apt-get install psmisc
 
     - name: Install Dependencies
       run: |
@@ -37,11 +42,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16
-    
-    - name: pkill set up
-      run: |
-        sudo apt-get update
-        sudo apt-get install psmisc
 
     - name: Install Dependencies
       run: |
