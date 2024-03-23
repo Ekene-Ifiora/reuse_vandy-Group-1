@@ -51,8 +51,8 @@
     "eject": "react-scripts eject",
     "backend": "jest --coverage",
     "stop": "taskkill -F -IM node.exe",
-    "frontend": "npm start && npx wait-on http://localhost:3000 && npx cypress run && npm run stop",
-    "cypressUI": "npm start && npx wait-on http://localhost:3000 && npx cypress open && npm run stop"
+    "frontend": "concurrently \"npm start\" \"npx wait-on http://localhost:3000 && npx cypress run && npm run stop\"",
+    "cypressUI": "concurrently \"npm start\" \"npx wait-on http://localhost:3000 && npx cypress open\""
   },
   "eslintConfig": {
     "extends": [
