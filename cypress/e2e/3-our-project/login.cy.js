@@ -1,4 +1,4 @@
-describe('template spec', () => {
+describe('log in tests', () => {
   it('passes', () => {
     cy.visit('/')
   })
