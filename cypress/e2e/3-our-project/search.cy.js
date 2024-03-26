@@ -55,5 +55,4 @@ describe('search tests', () => {
     cy.get(':nth-child(2) > .css-1k9efnl > :nth-child(1) > .chakra-avatar > .chakra-avatar__img').click();
     /* ==== End Cypress Studio ==== */
   });
-  
 });
