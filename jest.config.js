@@ -7,4 +7,5 @@ module.exports = {
     moduleFileExtensions: ['js', 'jsx', 'json', 'node'],
     roots: ['./src/hooks'],
     testMatch: ['**/__tests__/**/*.js', '**/?(*.)+(spec|test).js'],
+    coverageDirectory: "jest-coverage"
 };
