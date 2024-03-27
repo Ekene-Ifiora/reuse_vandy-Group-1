@@ -37,42 +37,42 @@ useShowToast.mockImplementation(() => {
 });
 
 describe('useEditProfile', () => {
-  // it('should initialize with isUpdating set to false', () => {
-  //   const { result } = renderHook(() => useEditProfile());
-  //   expect(result.current.isUpdating).toBe(false);
-  // });
+  it('should initialize with isUpdating set to false', () => {
+    const { result } = renderHook(() => useEditProfile());
+    expect(result.current.isUpdating).toBe(false);
+  });
 
-  // it('should run successfully', async () => {
-  //   const { result } = renderHook(() => useEditProfile());
-  //   const { editProfile } = result.current;
+  it('should run successfully', async () => {
+    const { result } = renderHook(() => useEditProfile());
+    const { editProfile } = result.current;
 
-  //   await act(async () => {
-  //     // Mock the implementation of editProfile for successful update
-  //     jest.spyOn(result.current, 'editProfile').mockResolvedValueOnce();
+    await act(async () => {
+      // Mock the implementation of editProfile for successful update
+      jest.spyOn(result.current, 'editProfile').mockResolvedValueOnce();
 
-  //     // Call the editProfile function
-  //     await editProfile();
-  //   });
+      // Call the editProfile function
+      await editProfile();
+    });
 
-  //   // After the update, isUpdating should be set to false
-  //   expect(result.current.isUpdating).toBe(false);
-  // });
+    // After the update, isUpdating should be set to false
+    expect(result.current.isUpdating).toBe(false);
+  });
 
-  // it('should handle errors during profile update', async () => {
-  //   const { result } = renderHook(() => useEditProfile());
-  //   const { editProfile } = result.current;
+  it('should handle errors during profile update', async () => {
+    const { result } = renderHook(() => useEditProfile());
+    const { editProfile } = result.current;
 
-  //   await act(async () => {
-  //     // Mock the implementation of editProfile to throw an error
-  //     jest.spyOn(result.current, 'editProfile').mockRejectedValueOnce(new Error('Update failed'));
+    await act(async () => {
+      // Mock the implementation of editProfile to throw an error
+      jest.spyOn(result.current, 'editProfile').mockRejectedValueOnce(new Error('Update failed'));
 
-  //     // Call the editProfile function
-  //     await editProfile();
-  //   });
+      // Call the editProfile function
+      await editProfile();
+    });
 
-  //   // After the error, isUpdating should be set to false
-  //   expect(result.current.isUpdating).toBe(false);
-  // });
+    // After the error, isUpdating should be set to false
+    expect(result.current.isUpdating).toBe(false);
+  });
 
   it('should edit successfully', async () => {
     const { result } = renderHook(() => useEditProfile());

@@ -12,7 +12,7 @@ describe('useFollowUser', () => {
         });
     });
 
-  it('should handle following/unfollowing users successfully', async () => {
+  it('should run handleFollowUser successfully', async () => {
     const { result } = renderHook(() => useFollowUser("testUserId"));
     const { handleFollowUser } = result.current;
 
@@ -43,4 +43,22 @@ describe('useFollowUser', () => {
     // After the error, isUpdating should be set to false
     expect(result.current.isUpdating).toBe(false);
   });
+
+  // it('should follow user accurately', async () => {
+  //   e2 = 'n';
+  //   useAuthStore.mockReturnValueOnce( { following: [1] } );
+  //   const { result } = renderHook(() => useFollowUser("testUserId"));
+  //   const { handleFollowUser } = result.current;
+  //   expect(result.current.isFollowing).toBe(false);
+
+  //   await act(async () => {
+  //     jest.spyOn(result.current, 'handleFollowUser');
+
+  //     // Call the handleFollowUser function
+  //     await handleFollowUser();
+  //   });
+
+  //   expect(result.current.isUpdating).toBe(false);
+  //   expect(e2).toBe('n');
+  // });
 });
