@@ -1,17 +1,23 @@
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act, waitFor } from "@testing-library/react";
 import usePreviewImg from "../usePreviewImg";
+import useShowToast from "../useShowToast";
 
 jest.mock('react-firebase-hooks/auth');
 jest.mock('../../store/authStore');
+jest.mock('firebase/firestore');
+jest.mock('../useShowToast');
 
-// Mock the necessary Firebase functions
-jest.mock('firebase/firestore', () => ({
-  ...jest.requireActual('firebase/firestore'),
-  getFirestore: jest.fn(() => ({
-    doc: jest.fn(),
-    getDoc: jest.fn(),
-  })),
-}));
+var e1;
+var e2;
+var e3;
+useShowToast.mockImplementation(() => {
+  const showToast = (error1, error2, error3) => {
+    e1 = error1; 
+    e2 = error2; 
+    e3 = error3;
+  }
+  return showToast;
+});
 
 describe("usePreviewImg", () => {
   it("should initialize with correct initial state", () => {
@@ -39,5 +45,123 @@ describe("usePreviewImg", () => {
       handleImageChange({ target: { files: [nonImageFile] } });
     });
 
+  });
+
+  it('should fail if file does not exist', async () => {
+    e1 = "j";
+    e2 = "j";
+    e3 = "j";
+
+    const { result } = renderHook(() => usePreviewImg());
+    const { handleImageChange } = result.current;
+
+    const file = false;
+
+    const input = {
+      target: {
+        files: [file]
+      }
+    };
+
+    await act(async () => {
+      jest.spyOn(result.current, 'handleImageChange');
+
+      handleImageChange(input);
+    });
+
+    expect(e1).toBe("Error");
+    expect(e2).toBe("Please select an image file");
+    expect(e3).toBe("error");
+
+    expect(result.current.selectedFile).toBeNull();
+  });
+
+  it('should fail if file does not start with image/', async () => {
+    e1 = "j";
+    e2 = "j";
+    e3 = "j";
+    
+    const { result } = renderHook(() => usePreviewImg());
+    const { handleImageChange } = result.current;
+
+    const file = {
+      type: "t"
+    };
+
+    const input = {
+      target: {
+        files: [file]
+      }
+    };
+
+    await act(async () => {
+      jest.spyOn(result.current, 'handleImageChange');
+
+      handleImageChange(input);
+    });
+
+    expect(e1).toBe("Error");
+    expect(e2).toBe("Please select an image file");
+    expect(e3).toBe("error");
+
+    expect(result.current.selectedFile).toBeNull();
+  });
+
+  it('should fail if file size too large', async () => {
+    e1 = "j";
+    e2 = "j";
+    e3 = "j";
+    
+    const { result } = renderHook(() => usePreviewImg());
+    const { handleImageChange } = result.current;
+
+    const file = {
+      type: "image/x.img",
+      size: 3 * 1024 * 1024
+    };
+
+    const input = {
+      target: {
+        files: [file]
+      }
+    };
+
+    await act(async () => {
+      jest.spyOn(result.current, 'handleImageChange');
+
+      handleImageChange(input);
+    });
+
+    expect(e1).toBe("Error");
+    expect(e2).toBe("File size must be less than 2MB");
+    expect(e3).toBe("error");
+
+    expect(result.current.selectedFile).toBeNull();
+  });
+
+  it('should work', async () => {
+    e1 = "j";
+    e2 = "j";
+    e3 = "j";
+    
+    const { result } = renderHook(() => usePreviewImg());
+    const { handleImageChange } = result.current;
+    const file = new File(["(⌐□_□)"], "image/test.png", { type: "image/plain" });
+
+    const input = {
+      target: {
+        files: [file]
+      }
+    };
+
+    await act(async () => {
+      jest.spyOn(result.current, 'handleImageChange');
+
+      handleImageChange(input);
+    });
+
+    waitFor(() => {
+      expect(result.current.selectedFile).not.toBeNull();
+    });
   });
 });
