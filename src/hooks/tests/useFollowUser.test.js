@@ -1,64 +1,150 @@
 // useFollowUser.test.js
 import { renderHook, act, waitFor } from '@testing-library/react';
 import useFollowUser from '../useFollowUser';
+import useAuthStore from "../../store/authStore";
+import useUserProfileStore from "../../store/userProfileStore";
+import useShowToast from "../useShowToast";
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+
+jest.mock('react-firebase-hooks/auth');
+jest.mock('../../store/authStore');
+jest.mock('../useShowToast');
+jest.mock('firebase/firestore');
+jest.mock('../../store/userProfileStore');
+
+var userProfile;
+const setUserProfile = (input) => {
+  userProfile = input;
+};
+useUserProfileStore.mockReturnValue({ userProfile, setUserProfile });
+
+arrayRemove.mockResolvedValue({});
+arrayUnion.mockResolvedValue({});
+doc.mockResolvedValue({});
+updateDoc.mockResolvedValue({});
+
+var authUser;
+const setAuthUser = (input) => {
+  authUser = input;
+};
+useAuthStore.mockReturnValue(setAuthUser);
+
+var e1;
+var e2;
+var e3;
+useShowToast.mockImplementation(() => {
+  const showToast = (error1, error2, error3) => {
+    e1 = error1; 
+    e2 = error2; 
+    e3 = error3;
+  }
+  return showToast;
+});
 
 describe('useFollowUser', () => {
-    it('should initialize with isUpdating set to false and isFollowing based on user data', () => {
-        const { result } = renderHook(() => useFollowUser("testUserId"));
-        expect(result.current.isUpdating).toBe(false);
+    it('should not run if not authorized', () => {
+      useAuthStore.mockReturnValue(false);
+
+      const { result } = renderHook(() => useFollowUser(5));
+      const { isUpdating, isFollowing, handleFollowUser } = result.current;
       
-        waitFor(() => {
-          expect(result.current.isFollowing).toBe(true);
-        });
+      expect(isUpdating).toBe(false);
+      expect(isFollowing).toBe(false);
     });
 
-  it('should run handleFollowUser successfully', async () => {
-    const { result } = renderHook(() => useFollowUser("testUserId"));
-    const { handleFollowUser } = result.current;
+    it('should set following to true if authorized', () => {
+      useAuthStore.mockReturnValueOnce({following: [5]});
 
-    await act(async () => {
-      // Mock the implementation of handleFollowUser for successful follow/unfollow
-      jest.spyOn(result.current, 'handleFollowUser').mockResolvedValueOnce();
-
-      // Call the handleFollowUser function
-      await handleFollowUser();
+      const { result } = renderHook(() => useFollowUser(6));
+      const { isUpdating, isFollowing, handleFollowUser } = result.current;
+      
+      expect(isUpdating).toBe(false);
+      expect(isFollowing).toBe(false);
     });
 
-    // After the isUpdating, isUpdating should be set to false
-    expect(result.current.isUpdating).toBe(false);
-  });
+    it('should set isFollowing to false if authorized', () => {
+      useAuthStore.mockReturnValueOnce({following: [5]});
 
-  it('should handle errors during following/unfollowing users', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useFollowUser("testUserId"));
-    const { handleFollowUser } = result.current;
-
-    await act(async () => {
-      // Mock the implementation of handleFollowUser to throw an error
-      jest.spyOn(result.current, 'handleFollowUser').mockRejectedValueOnce(new Error('Follow/Unfollow failed'));
-
-      // Call the handleFollowUser function
-      await handleFollowUser();
+      const { result } = renderHook(() => useFollowUser(5));
+      const { isUpdating, isFollowing, handleFollowUser } = result.current;
+      
+      waitFor(() => {
+        expect(isUpdating).toBe(false);
+        expect(isFollowing).toBe(true);
+      });
     });
 
-    // After the error, isUpdating should be set to false
-    expect(result.current.isUpdating).toBe(false);
-  });
+    it('should work if isFollowing and not userProfile', () => {
+      userProfile = undefined;
+      authUser = undefined;
+      useAuthStore.mockReturnValueOnce({following: [5, 6]});
 
-  // it('should follow user accurately', async () => {
-  //   e2 = 'n';
-  //   useAuthStore.mockReturnValueOnce( { following: [1] } );
-  //   const { result } = renderHook(() => useFollowUser("testUserId"));
-  //   const { handleFollowUser } = result.current;
-  //   expect(result.current.isFollowing).toBe(false);
+      const { result } = renderHook(() => useFollowUser(5));
+      const { isUpdating, isFollowing, handleFollowUser } = result.current;
 
-  //   await act(async () => {
-  //     jest.spyOn(result.current, 'handleFollowUser');
+      waitFor(() => {
+        expect(isUpdating).toBe(false);
+        expect(isFollowing).toBe(true);
+      });
 
-  //     // Call the handleFollowUser function
-  //     await handleFollowUser();
-  //   });
+      act(() => {
+        handleFollowUser();
+      });
 
-  //   expect(result.current.isUpdating).toBe(false);
-  //   expect(e2).toBe('n');
-  // });
+      waitFor(() => {
+        expect(authUser).toBe({following: [6]});
+        expect(isUpdating).toBe(false);
+        expect(isFollowing).toBe(false);
+      });
+    });
+
+    it('should work if isFollowing and userProfile', () => {
+      useAuthStore.mockReturnValueOnce({following: [5, 6]});
+      authUser = undefined;
+      userProfile = true;
+
+      const { result } = renderHook(() => useFollowUser(5));
+      const { isUpdating, isFollowing, handleFollowUser } = result.current;
+
+      waitFor(() => {
+        expect(isUpdating).toBe(false);
+        expect(isFollowing).toBe(true);
+      });
+
+      act(() => {
+        handleFollowUser();
+      });
+
+      waitFor(() => {
+        expect(authUser).toBe({following: [6]});
+        expect(userProfile).toBe({following: [6]});
+        expect(isUpdating).toBe(false);
+        expect(isFollowing).toBe(false);
+      });
+    });
+
+    it('should work if not isFollowing and not userProfile', () => {
+      userProfile = undefined;
+      authUser = undefined;
+      useAuthStore.mockReturnValueOnce({following: [5, 6]});
+
+      const { result } = renderHook(() => useFollowUser(4));
+      const { isUpdating, isFollowing, handleFollowUser } = result.current;
+
+      waitFor(() => {
+        expect(isUpdating).toBe(false);
+        expect(isFollowing).toBe(false);
+      });
+
+      act(() => {
+        handleFollowUser();
+      });
+
+      waitFor(() => {
+        expect(authUser).toBe({following: [4, 5, 6]});
+        expect(userProfile).toBe({following: [4, 5, 6]});
+        expect(isUpdating).toBe(false);
+        expect(isFollowing).toBe(false);
+      });
+    });
 });

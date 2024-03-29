@@ -98,4 +98,29 @@ describe('useEditProfile', () => {
 
     expect(result.current.isUpdating).toBe(false);
   });
+
+  it('should edit successfully with fallback', async () => {
+    e2 = "f";
+    useAuthStore.mockReturnValueOnce({ fullName: "name", username: "user", bio: "bio", profilePicURL: "url" });
+    const { result } = renderHook(() => useEditProfile());
+    const { editProfile } = result.current;
+
+    await act(async () => {
+      jest.spyOn(result.current, 'editProfile');
+
+      const inputs = {
+        x: "j"
+      }
+
+      const selectedFile = false;
+
+      await editProfile(inputs, selectedFile);
+    });
+
+    expect(e1).toBe('Success');
+    expect(e2).toBe("Profile updated successfully");
+    expect(e3).toBe("success");
+
+    expect(result.current.isUpdating).toBe(false);
+  });
 });
