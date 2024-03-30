@@ -4,9 +4,27 @@ describe('log in tests', () => {
   })
 
   /* ==== Test Created with Cypress Studio ==== */
-  it('Login', function() {
+  it('Sign Up', function() {
     /* ==== Generated with Cypress Studio ==== */
     cy.visit('/');
+    cy.get('.sc-csKJxZ > .sc-gLLuof').click();
+    cy.get('[type="name"]').clear('m');
+    cy.get('[type="name"]').type('m');
+    cy.get('[type="username"]').clear();
+    cy.get('[type="username"]').type('m');
+    cy.get('.sc-guDLey > .sc-hLQSwg > [type="email"]').clear();
+    cy.get('.sc-guDLey > .sc-hLQSwg > [type="email"]').type('marcus.p.kamen@vanderbilt.edu');
+    cy.get('.sc-guDLey > .sc-hLQSwg > [type="password"]').clear();
+    cy.get('.sc-guDLey > .sc-hLQSwg > [type="password"]').type('p');
+    cy.get('.sc-guDLey > .sc-hLQSwg > .sc-gLLuof').click();
+    cy.get('.sc-irLvIq > .sc-gLLuof').click();
+    /* ==== End Cypress Studio ==== */
+  });
+
+  /* ==== Test Created with Cypress Studio ==== */
+  it('Login', function() {
+    /* ==== Generated with Cypress Studio ==== */
+    cy.visit('/auth');
     cy.get('.sc-csKJxZ > .sc-gLLuof').click();
     cy.get('.loginSignupContainer').click();
     cy.get('.sc-irLvIq > .sc-gLLuof').click();
