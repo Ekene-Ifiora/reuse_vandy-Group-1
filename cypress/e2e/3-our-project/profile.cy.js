@@ -8,7 +8,7 @@ describe('profile tests', () => {
     /* ==== Generated with Cypress Studio ==== */
     cy.visit('/');
     cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').clear('j');
-    cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').type('johndoe@gmail.com');
+    cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').type('johntravolta@gmail.com');
     cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').clear();
     cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').type('Password{enter}');
     cy.get('.sc-dmyCSP > .sc-hLQSwg > .sc-gLLuof').click();
@@ -26,7 +26,7 @@ describe('profile tests', () => {
     cy.visit('/');
     cy.get('.logout > .nav-icons').click();
     cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').clear('j');
-    cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').type('johndoe@gmail.com');
+    cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').type('johntravolta@gmail.com');
     cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').clear();
     cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').type('Password{enter}');
     cy.get('.sc-dmyCSP > .sc-hLQSwg > .sc-gLLuof').click();
@@ -51,7 +51,7 @@ describe('profile tests', () => {
     cy.visit('/');
     cy.get('.logout > .nav-icons').click();
     cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').clear('j');
-    cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').type('johndoe@gmail.com');
+    cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').type('johntravolta@gmail.com');
     cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').clear();
     cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').type('Password{enter}');
     cy.get('.sc-dmyCSP > .sc-hLQSwg > .sc-gLLuof').click();
