@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/reuse_vandy-Group-1/static/css/main.1735b534.css",
+    "main.js": "/reuse_vandy-Group-1/static/js/main.44379f38.js",
+    "index.html": "/reuse_vandy-Group-1/index.html",
+    "main.1735b534.css.map": "/reuse_vandy-Group-1/static/css/main.1735b534.css.map",
+    "main.44379f38.js.map": "/reuse_vandy-Group-1/static/js/main.44379f38.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1735b534.css",
+    "static/js/main.44379f38.js"
+  ]
+}
