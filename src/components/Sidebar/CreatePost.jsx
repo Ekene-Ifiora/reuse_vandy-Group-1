@@ -40,12 +40,14 @@ const CreatePost = () => {
   const [caption, setCaption] = useState("");
   const [inputs, setInputs] = useState({
     name: "",
+    nameLower: "",
     tags: "",
     description: "",
     buyNowPrice: "",
     location: "",
     sellerName: "",
     sellerEmail: "",
+    sellerUsername: "",
     comments: [],
     createdAt: Date.now(),
     createdBy: "",
@@ -213,6 +215,8 @@ function useCreatePost() {
     if (isLoading) return;
     inputs.sellerName = authUser.fullName;
     inputs.sellerEmail = authUser.email;
+    inputs.nameLower = inputs.name.toLowerCase();
+    inputs.sellerUsername = authUser.username;
     if (!inputs.name) throw new Error("Please input item name");
     if (!inputs.buyNowPrice) throw new Error("Please input item price");
     if (!selectedFile) throw new Error("Please select an image");

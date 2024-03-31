@@ -54,7 +54,11 @@ const ProfilePage = () => {
   return (
     <>
       <div className="navbar">
-        <Navigation showProfileIcon={false} showHomeIcon={true} />
+        <Navigation
+          showProfileIcon={false}
+          showLogoutIcon={false}
+          showHomeIcon={true}
+        />
       </div>
 
       <Container maxW="container.lg" py={5} pt="60px">

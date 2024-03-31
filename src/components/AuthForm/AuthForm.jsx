@@ -8,12 +8,11 @@ function AuthForm() {
   const [signIn, toggle] = React.useState(true);
 
   return (
-    <body class="loginSignupContainer">
-      <Components.Container >
+    <div className="loginSignupContainer">
+      <Components.Container>
         <Components.SignUpContainer signinIn={signIn}>
           <Signup />
         </Components.SignUpContainer>
-
         <Components.SignInContainer signinIn={signIn}>
           <Login />
         </Components.SignInContainer>
@@ -42,7 +41,7 @@ function AuthForm() {
           </Components.Overlay>
         </Components.OverlayContainer>
       </Components.Container>
-    </body>
+    </div>
   );
 }
 

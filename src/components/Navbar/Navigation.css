@@ -38,6 +38,14 @@ body {
 .cart,
 .logout,
 .home,
+.avatar,
 .profile-container {
   cursor: pointer;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }

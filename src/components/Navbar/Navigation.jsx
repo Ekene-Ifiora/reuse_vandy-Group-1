@@ -1,5 +1,4 @@
 import { CiLogout } from "react-icons/ci";
-import { CgProfile } from "react-icons/cg";
 import {
   IoChatboxEllipsesOutline,
   IoCartOutline,
@@ -9,19 +8,21 @@ import useLogout from "../../hooks/useLogout";
 import "./Navigation.css";
 import CreatePost from "../../components/Sidebar/CreatePost";
 import "@chakra-ui/react";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Spinner } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase/firebase";
 import SearchProduct from "../../components/Sidebar/SearchProduct";
 import useAuthStore from "../../store/authStore";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import Avatar from "react-avatar";
 
 const Navigation = ({
-  handleInputChange,
-  query,
-  showProfileIcon,
-  showHomeIcon,
+  showSearchIcon = true,
+  showProfileIcon = true,
+  showHomeIcon = true,
+  showCartIcon = true,
+  showLogoutIcon = true,
 }) => {
   const navigate = useNavigate();
   const [user, loading, error] = useAuthState(auth);
@@ -31,6 +32,18 @@ const Navigation = ({
   const goToProfile = () => {
     if (user) {
       navigate(`/${authUser.username}`); // Navigate using the user's UID
+    }
+  };
+
+  const goToCart = () => {
+    if (user) {
+      navigate(`/${authUser.username}/cart`); // Navigate using the user's UID
+    }
+  };
+
+  const goToChat = () => {
+    if (user) {
+      navigate(`/${authUser.username}/chat`); // Navigate using the user's UID
     }
   };
 
@@ -44,11 +57,25 @@ const Navigation = ({
     <ChakraProvider>
       <nav>
         <div className="searchbar">
-          <SearchProduct className="nav-icons" />
+          {showSearchIcon && <SearchProduct className="nav-icons" />}
         </div>
         <div className="profile-container">
-          {showProfileIcon && (
-            <CgProfile onClick={goToProfile} className="nav-icons" />
+          {authUser && showProfileIcon ? (
+            <Avatar
+              color={Avatar.getRandomColor("sitebase", [
+                "red",
+                "green",
+                "blue",
+              ])}
+              src={authUser.profilePicURL}
+              round={true}
+              size="30"
+              textSizeRatio={2.5}
+              maxInitials={2}
+              onClick={goToProfile}
+            />
+          ) : (
+            showProfileIcon && <Spinner size="sm" />
           )}
         </div>
         <div className="home">
@@ -57,16 +84,18 @@ const Navigation = ({
           )}
         </div>
         <div className="cart">
-          <IoCartOutline onClick={goToProfile} className="nav-icons" />
+          {showCartIcon && (
+            <IoCartOutline onClick={goToCart} className="nav-icons" />
+          )}
         </div>
         <div className="chat">
-          <IoChatboxEllipsesOutline className="nav-icons" />
+          <IoChatboxEllipsesOutline onClick={goToChat} className="nav-icons" />
         </div>
         <div className="create">
           <CreatePost className="nav-icons" />
         </div>
         <div className="logout">
-          {showProfileIcon && (
+          {showLogoutIcon && (
             <CiLogout onClick={handleLogout} className="nav-icons" />
           )}
         </div>
