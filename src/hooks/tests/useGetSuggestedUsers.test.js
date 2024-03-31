@@ -1,61 +1,72 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import useGetSuggestedUsers from "../useGetSuggestedUsers";
+import useAuthStore from "../../store/authStore";
+import useShowToast from "../useShowToast";
+import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 
 jest.mock('react-firebase-hooks/auth');
 jest.mock('../useShowToast');
 jest.mock('../../store/authStore');
+jest.mock('firebase/firestore');
 
-// Mock the necessary Firebase functions
-jest.mock('firebase/firestore', () => ({
-  ...jest.requireActual('firebase/firestore'),
-  getFirestore: jest.fn(() => ({
-    doc: jest.fn(),
-    getDoc: jest.fn(),
-  })),
-}));
+collection.mockResolvedValue({});
+getDocs.mockResolvedValue({});
+limit.mockResolvedValue({});
+orderBy.mockResolvedValue({});
+query.mockResolvedValue({});
+where.mockResolvedValue({});
+useAuthStore.mockReturnValue(true);
+
+var e1;
+var e2;
+var e3;
+useShowToast.mockImplementation(() => {
+  const showToast = (error1, error2, error3) => {
+    e1 = error1; 
+    e2 = error2; 
+    e3 = error3;
+  }
+  return showToast;
+});
 
 describe("useGetSuggestedUsers", () => {
-  it("should initialize with isLoading set to true", () => {
-    const { result } = renderHook(() => useGetSuggestedUsers());
-    expect(result.current.isLoading).toBe(true);
-  });
-
-  it("should fetch suggested users successfully", async () => {
+  it('should not run if not authorized', async () => {
+    useAuthStore.mockReturnValueOnce(false);
     const { result } = renderHook(() => useGetSuggestedUsers());
     const { isLoading, suggestedUsers } = result.current;
 
-    // Mock Firestore query and snapshot data
-    const mockQuerySnapshot = {
-      forEach: jest.fn(),
-    };
+    expect(isLoading).toBe(true);
+    expect(suggestedUsers).toEqual([]);
+  });
 
-    // Mock each document in the snapshot
-    const mockDoc = { id: "userId", data: jest.fn(() => ({ createdAt: Date.now() })) };
-    mockQuerySnapshot.forEach.mockImplementation((callback) => {
-      callback(mockDoc);
-    });
-
-    // Mock Firestore getDocs function to return the mock query snapshot
-    jest.spyOn(require("firebase/firestore"), "getDocs").mockResolvedValueOnce(mockQuerySnapshot);
+  it('should fail if unknown error', () => {
+    e2 = "f";
+    getDocs.mockResolvedValue([{ id: 1, data: 5 }]);
+    const { result } = renderHook(() => useGetSuggestedUsers());
+    const { isLoading, suggestedUsers } = result.current;
 
     waitFor(() => {
       expect(isLoading).toBe(false);
-      expect(suggestedUsers).toBeDefined();
-    });
+      expect(suggestedUsers).toEqual([]);
 
-  });
-
-  it("should handle errors during suggested users fetch", async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useGetSuggestedUsers());
-    const { isLoading, showToast } = result.current;
-
-    // Mock Firestore getDocs function to throw an error
-    jest.spyOn(require("firebase/firestore"), "getDocs").mockRejectedValueOnce(new Error("Fetch error"));
-
-    
-    waitFor (() => {
-      expect(isLoading).toBe(true);
-      expect(showToast).toHaveBeenCalledWith("Error getting suggested users", "error");
+      expect(e1).toBe("Error");
+      expect(e2).toBe("j");
+      expect(e3).toBe("error");
     });
   });
+
+  it('should work', () => {
+    e2 = "q";
+    useAuthStore.mockReturnValueOnce( { uid: 1, following: 2 });
+    getDocs.mockResolvedValue([{ id: 1, data: () => { return 5; } }]);
+    const { result } = renderHook(() => useGetSuggestedUsers());
+    const { isLoading, suggestedUsers } = result.current;
+
+    waitFor(() => {
+      expect(isLoading).toBe(false);
+      expect(suggestedUsers).toBe([{ data: 5, id: 1 }]);
+      expect(e2).toBe("q");
+    });
+  });
+
 });

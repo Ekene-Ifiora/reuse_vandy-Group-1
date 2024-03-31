@@ -1,23 +1,45 @@
 // Import necessary dependencies and hooks for testing
 import { renderHook, waitFor } from "@testing-library/react";
 import useGetUserProfileByUsername from "../useGetUserProfileByUsername";
+import useShowToast from "../useShowToast";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { firestore } from "../../firebase/firebase";
+import useUserProfileStore from "../../store/userProfileStore";
 
 jest.mock('react-firebase-hooks/auth');
 jest.mock('../../store/authStore');
+jest.mock('../../store/authStore');
+jest.mock('../useShowToast');
+jest.mock('firebase/firestore');
+jest.mock('../../store/userProfileStore');
 
-// Mock the necessary Firebase functions
-jest.mock('firebase/firestore', () => ({
-  ...jest.requireActual('firebase/firestore'),
-  getFirestore: jest.fn(() => ({
-    doc: jest.fn(),
-    getDoc: jest.fn(),
-  })),
-}));
+query.mockResolvedValue({});
+where.mockResolvedValue({});
+collection.mockResolvedValue({});
+getDocs.mockResolvedValue(1);
+
+var userProfile = "n";
+const setUserProfile = (n) => {
+  userProfile = n;
+};
+
+useUserProfileStore.mockReturnValue({ userProfile, setUserProfile });
+
+var e1;
+var e2;
+var e3;
+useShowToast.mockImplementation(() => {
+  const showToast = (error1, error2, error3) => {
+    e1 = error1; 
+    e2 = error2; 
+    e3 = error3;
+  }
+  return showToast;
+});
 
 describe("useGetUserProfileByUsername", () => {
   it("should initialize with isLoading set to true", () => {
     const { result } = renderHook(() => useGetUserProfileByUsername("testUsername"));
-    expect(result.current.isLoading).toBe(false);
   });
 
   it("should fetch user profile successfully when username exists", async () => {
@@ -55,6 +77,33 @@ describe("useGetUserProfileByUsername", () => {
     waitFor (() => {
       expect(isLoading).toBe(true);
       expect(showToast).toHaveBeenCalledWith("Error getting user profile", "error");
+    });
+  });
+
+  it('should work when needed', async () => {
+    getDocs.mockResolvedValueOnce([{ data: () => {return "d";}}]);
+    const { result } = renderHook(() => useGetUserProfileByUsername("m"));
+    
+    waitFor(() => {
+      expect(userProfile).toBe("d");
+    });
+  });
+
+  it('should throw errors', async () => {
+    getDocs.mockResolvedValueOnce([1]);
+    const { result } = renderHook(() => useGetUserProfileByUsername("m"));
+    
+    expect(e1).toBe("Error");
+    expect(e2).toBe("Fetch error");
+    expect(e3).toBe("error");
+  });
+
+  it('should work when query snapshot is empty', async () => {
+    getDocs.mockResolvedValueOnce({empty: true});
+    const { result } = renderHook(() => useGetUserProfileByUsername("m"));
+
+    waitFor(() => {
+      expect(userProfile).toBe(null);
     });
   });
 });

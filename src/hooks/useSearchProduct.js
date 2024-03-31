@@ -42,7 +42,7 @@ const useSearchProduct = () => {
       );
       const q3 = query(
         collection(firestore, "posts"),
-        where("sellerName", "in", itemName)
+        where("sellerName", "==", itemName)
       );
       const q4 = query(
         collection(firestore, "posts"),

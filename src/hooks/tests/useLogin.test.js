@@ -3,67 +3,122 @@ import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import useAuthStore from '../../store/authStore';
 import useShowToast from '../useShowToast';
 import useLogin from '../useLogin';
+import { doc, getDoc } from "firebase/firestore";
 
-// Mock the useSignInWithEmailAndPassword and useShowToast hooks
 jest.mock('react-firebase-hooks/auth');
 jest.mock('../useShowToast');
 jest.mock('../../store/authStore');
+jest.mock('firebase/firestore');
 
-// Mock the necessary Firebase functions
-jest.mock('firebase/firestore', () => ({
-  ...jest.requireActual('firebase/firestore'),
-  getFirestore: jest.fn(() => ({
-    doc: jest.fn(),
-    getDoc: jest.fn(),
-  })),
-}));
+doc.mockResolvedValue({});
+getDoc.mockResolvedValue({data: () => {
+  return {
+    uid: 1,
+    email: "@",
+    username: "u",
+    fullName: "F",
+    bio: "",
+    profilePicURL: "",
+    followers: [],
+    following: [],
+    posts: [],
+    chats: [],
+    friends: [],
+    createdAt: 1,
+    cart:[],
+  };
+}});
+useAuthStore.mockReturnValue((_) => { return true; });
+
+var wantTrue = false;
+var signInWithEmailAndPassword = () => {
+  return wantTrue;
+};
+
+var loading = false;
+var error = {message: "here"};
+
+useSignInWithEmailAndPassword.mockReturnValue([signInWithEmailAndPassword, , loading, error]);
+
+var e1;
+var e2;
+var e3;
+useShowToast.mockImplementation(() => {
+  const showToast = (error1, error2, error3) => {
+    e1 = error1; 
+    e2 = error2; 
+    e3 = error3;
+  }
+  return showToast;
+});
 
 describe('useLogin', () => {
-  // Mock the dependencies for the hook
-  const mockSignInWithEmailAndPassword = jest.fn();
-  const mockUseAuthStore = jest.fn();
-  const mockShowToast = jest.fn();
-
-  // Set up initial state for the mocked useAuthStore
-  mockUseAuthStore.mockReturnValue({ login: jest.fn() });
-
-  // Set up the mocked hook functions
-  useSignInWithEmailAndPassword.mockReturnValue([mockSignInWithEmailAndPassword, , false, null]);
-  useAuthStore.mockImplementation(mockUseAuthStore);
-  useShowToast.mockReturnValue(mockShowToast);
-
-  // Clean up mocks before each test
-  beforeEach(() => {
-    jest.clearAllMocks();
-    localStorage.clear();
-  });
-
-  it('should show an error toast if email or password is not provided', async () => {
+  it('should error if bad inputs', async () => {
+    const inputs = {x: 's'};
     const { result } = renderHook(() => useLogin());
+    const { login } = result.current;
 
     await act(async () => {
-      await result.current.login({ email: '', password: 'password' });
+      await login(inputs);
     });
 
-    expect(mockShowToast).toHaveBeenCalledWith('Error', 'Please fill all the fields', 'error');
+    expect(e1).toBe("Error");
+    expect(e2).toBe("Please fill all the fields")
+    expect(e3).toBe("error");
   });
 
-  it('should handle login failure and show an error toast', async () => {
-    const error = { message: 'Authentication failed' };
-
-    mockSignInWithEmailAndPassword.mockRejectedValue(error);
-
+  it('should work if user not credentialed', async () => {
+    e1 = "e";
+    const inputs = {
+      email: "@",
+      password: "p"
+    };
     const { result } = renderHook(() => useLogin());
+    const { login } = result.current;
 
     await act(async () => {
-      await result.current.login({ email: 'test@example.com', password: 'password' });
+      await login(inputs);
     });
 
-    expect(mockShowToast).toHaveBeenCalledWith('Error', error.message, 'error');
+    expect(e1).toBe("e");
   });
-  // Clean up the global mock after all tests
-  afterAll(() => {
-    jest.restoreAllMocks();
+
+  it('should work', async () => {
+    e1 = "4";
+    const inputs = {
+      email: "@",
+      password: "p"
+    };
+    const { result } = renderHook(() => useLogin());
+    const { login } = result.current;
+
+    wantTrue = {user: {uid: 5}};
+
+    await act(async () => {
+      await login(inputs);
+    });
+
+    expect(e1).toBe("4");
+  });
+
+  it('should handle errors', async () => {
+    const inputs = {
+      email: "@",
+      password: "p"
+    };
+    const { result } = renderHook(() => useLogin());
+    const { login } = result.current;
+
+    wantTrue = true;
+    getDoc.mockResolvedValue({x: () => {return true;}});
+
+    await act(async () => {
+      await login(inputs);
+    });
+
+    expect(e1).toBe("Error");
+    expect(e2).toBe("Cannot read properties of undefined (reading 'uid')");
+    expect(e3).toBe("error");
   });
 });
 

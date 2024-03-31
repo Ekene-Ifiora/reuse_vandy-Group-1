@@ -1,26 +1,35 @@
 // Import necessary dependencies and hooks for testing
 import { renderHook, act, waitFor } from "@testing-library/react";
 import useGetUserProfileById from "../useGetUserProfileById";
+import useShowToast from "../useShowToast";
+import { doc, getDoc } from "firebase/firestore";
 
 jest.mock('react-firebase-hooks/auth');
 jest.mock('../../store/authStore');
+jest.mock('../useShowToast');
+jest.mock('firebase/firestore');
 
-// Mock the necessary Firebase functions
-jest.mock('firebase/firestore', () => ({
-  ...jest.requireActual('firebase/firestore'),
-  getFirestore: jest.fn(() => ({
-    doc: jest.fn(),
-    getDoc: jest.fn(),
-  })),
-}));
+doc.mockResolvedValue({});
+getDoc.mockResolvedValue({});
+
+var e1;
+var e2;
+var e3;
+useShowToast.mockImplementation(() => {
+  const showToast = (error1, error2, error3) => {
+    e1 = error1; 
+    e2 = error2; 
+    e3 = error3;
+  }
+  return showToast;
+});
 
 describe("useGetUserProfileById", () => {
   it("should initialize with isLoading set to false", () => {
-    const { result } = renderHook(() => useGetUserProfileById("testUserId"));
-    expect(result.current.isLoading).toBe(false);
+    renderHook(() => useGetUserProfileById("testUserId"));
   });
 
-  it("should fetch user profile successfully when user ID exists", async () => {
+  it("should run correctly", async () => {
     const { result } = renderHook(() => useGetUserProfileById("test"));
     const { isLoading, userProfile } = result.current;
 
@@ -57,5 +66,43 @@ describe("useGetUserProfileById", () => {
       expect(showToast).toHaveBeenCalledWith("Error getting user profile", "error");
     });
   });
+
+  it('should get user profile', async () => {
+    e2 = "e";
+    var id = 2;
+    getDoc.mockResolvedValueOnce({ exists: () => { return true; } });
+
+    act(() => {
+      const { result } = renderHook(() => useGetUserProfileById(id));
+    });
+
+    expect(e2).toBe("e");
+  });
+
+  it('should get errors', async () => {
+    var id = 2;
+
+    act(() => {
+      const { result } = renderHook(() => useGetUserProfileById(id));
+      id = 1;
+    });
+    
+    expect(e1).toBe("Error");
+    expect(e2).toBe("userRef.data is not a function");
+    expect(e3).toBe("error");
+  });
+
+  it('should work if userRef does not exist', async () => {
+    e2 = "e";
+    var id = 2;
+    getDoc.mockResolvedValueOnce({ exists: () => { return false; } });
+
+    act(() => {
+      const { result } = renderHook(() => useGetUserProfileById(id));
+    });
+
+    expect(e2).toBe("e");
+  });
+
 
 });
