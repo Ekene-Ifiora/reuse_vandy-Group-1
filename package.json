@@ -5,7 +5,7 @@
   "nyc": {
     "report-dir": "cypress-coverage"
   },
-  "homepage": "https://ekene-ifiora.github.io/reuse_vandy-Group-1/",
+  "homepage": "https://ekene-ifiora.github.io/",
   "dependencies": {
     "@ant-design/icons": "^5.3.0",
     "@babel/core": "^7.24.0",
