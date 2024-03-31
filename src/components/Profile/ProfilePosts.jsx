@@ -9,6 +9,8 @@ const ProfilePosts = () => {
 	const noPostsFound = !isLoading && posts.length === 0;
 	if (noPostsFound) return <NoPostsFound />;
 	
+	console.log(Array.isArray(posts) ? 'Array' : 'Not an Array');
+	console.log(posts)
 
 	return (
 	<ChakraProvider>
@@ -32,7 +34,7 @@ const ProfilePosts = () => {
 			{!isLoading && (
 				<>
 					{posts.map((post) => (
-						<ProfilePost post={post} key={post.id} />
+						<ProfilePost key={post.id} post={post}/>
 					))}
 				</>
 			)}
