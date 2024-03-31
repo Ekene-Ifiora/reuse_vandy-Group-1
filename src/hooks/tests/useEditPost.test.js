@@ -74,18 +74,20 @@ describe('useEditPost', () => {
         });
 
         expect(e1).toBe('Error');
-        expect(e2).toBe('setPosts is not a function');
+        expect(e2).toBe('posts.map is not a function');
         expect(e3).toBe('error');
         expect(isUpdating).toBe(false);
     });
 
     it('should work if selectedFile', async () => {
+        const post = { id: 5, buyNowPrice: 5, description: "k", imageURL: 'k', name: "t" };
+        const otherPost = { id: 6, buyNowPrice: 6, description: "1", imageURL: '1', name: "1" };
+        usePostStore.mockReturnValueOnce([post, otherPost]);
         e2 = 'j';
         const { result } = renderHook(() => useEditPost());
         const { editPost, isUpdating } = result.current;
         expect(isUpdating).toBe(false);
 
-        const post = { id: 5, buyNowPrice: 5, description: "k", imageURL: 'k', name: "t" };
         const inputs = { id: 5, buyNowPrice: 5, description: "k", imageURL: 'k', name: "t" };
         const selectedFile = true;
 
@@ -100,12 +102,14 @@ describe('useEditPost', () => {
     });
 
     it('should work if no selectedFile', async () => {
+        const post = { id: 5, buyNowPrice: 5, description: "k", imageURL: 'k', name: "t" };
+        const otherPost = { id: 6, buyNowPrice: 6, description: "1", imageURL: '1', name: "1" };
+        usePostStore.mockReturnValueOnce([post, otherPost]);
         e2 = 'j';
         const { result } = renderHook(() => useEditPost());
         const { editPost, isUpdating } = result.current;
         expect(isUpdating).toBe(false);
 
-        const post = { id: 5, buyNowPrice: 5, description: "k", imageURL: 'k', name: "t" };
         const inputs = { id: 5, buyNowPrice: 5, description: "k", imageURL: 'k', name: "t" };
         const selectedFile = false;
 
@@ -120,12 +124,14 @@ describe('useEditPost', () => {
     });
 
     it('should work if default info', async () => {
+        const post = { id: 5, buyNowPrice: 5, description: "k", imageURL: 'k', name: "t" };
+        const otherPost = { id: 6, buyNowPrice: 6, description: "1", imageURL: '1', name: "1" };
+        usePostStore.mockReturnValueOnce([post, otherPost]);
         e2 = 'j';
         const { result } = renderHook(() => useEditPost());
         const { editPost, isUpdating } = result.current;
         expect(isUpdating).toBe(false);
 
-        const post = { id: 5, buyNowPrice: 5, description: "k", imageURL: 'k', name: "t" };
         const inputs = { id: 5 };
         const selectedFile = false;
 
