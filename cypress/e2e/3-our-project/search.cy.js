@@ -55,4 +55,15 @@ describe('search tests', () => {
     cy.get(':nth-child(2) > .css-1k9efnl > :nth-child(1) > .chakra-avatar > .chakra-avatar__img').click();
     /* ==== End Cypress Studio ==== */
   });
+
+  it('search category not case sensitive', () => {
+    /* ==== Generated with Cypress Studio ==== */
+    cy.visit('/');
+    cy.get('.search-input').click();
+    cy.get('#field-\\:r17\\:').clear('e');
+    cy.get('#field-\\:r17\\:').type('electronics{enter}');
+    cy.get('.chakra-button').click();
+    cy.get(':nth-child(2) > .css-1k9efnl > :nth-child(1) > .chakra-avatar > .chakra-avatar__img').click();
+    /* ==== End Cypress Studio ==== */
+  });
 });
