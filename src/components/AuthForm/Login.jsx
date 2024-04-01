@@ -1,12 +1,12 @@
 import * as Components from "./Styles/Components";
-import { Alert, AlertDescription } from "@chakra-ui/alert";
 import React, { useState } from "react";
 import useLogin from "../../hooks/useLogin";
-import { auth } from "../../firebase/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import useShowToast from "../../hooks/useShowToast";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const Login = () => {
   // State for storing email and password inputs
+  const showToast = useShowToast();
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -16,7 +16,7 @@ const Login = () => {
     e.preventDefault();
     login(inputs);
     {
-      error && console.log(error.message);
+      error && showToast("Error", error.message, "error");
     }
   };
 
@@ -24,7 +24,7 @@ const Login = () => {
   const { loading, error, login } = useLogin();
 
   return (
-    <>
+    <ChakraProvider>
       <Components.Form onSubmit={signIn}>
         <Components.Title>Sign in</Components.Title>
         <Components.Input
@@ -47,22 +47,8 @@ const Login = () => {
         </Components.Button>
 
         {/* Display error message if login fails */}
-        {error && (
-          <Alert
-            status="error"
-            style={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
-            <AlertDescription style={{ color: "red", paddingTop: "20px" }}>
-              {error.message}
-            </AlertDescription>
-          </Alert>
-        )}
       </Components.Form>
-    </>
+    </ChakraProvider>
   );
 };
 

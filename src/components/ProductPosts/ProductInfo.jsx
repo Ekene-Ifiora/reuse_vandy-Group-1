@@ -24,9 +24,25 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../store/authStore";
+import ChatPage from "../../pages/ChatPage/ChatPage";
+import { newChat } from "react-chat-engine";
 
 const ProductInfo = ({ open, onClose, item }) => {
   const { isImageOpen, onImageOpen, onImageClose } = useDisclosure();
+  const navigate = useNavigate();
+  const authUser = useAuthStore((state) => state.user);
+  const publicKey = "282eceef-5a55-4bac-9587-7e367d4ad838"
+
+  const goToChat = (item) => {
+
+    if (authUser) {
+      <ChatPage sellerUsername={item.sellerName} />
+      navigate(`/${authUser.username}/chat`); // Navigate using the user's UID
+    }
+  };
+  
   if (!open) return null;
   return (
     <ChakraProvider>
@@ -35,13 +51,6 @@ const ProductInfo = ({ open, onClose, item }) => {
 
         <ModalContent
           bg={"gray.300"}
-          // border={"1px solid gray"}
-          // width={"100vh"}
-          // height={"150vh"}
-          // position={"fixed"}
-          // marginTop={"20vh"}
-          // marginLeft={"300px"}
-          // borderRadius={6}
         >
           <ModalHeader color="black" fontSize={"large"} align="center">
             {item.name}
@@ -57,19 +66,6 @@ const ProductInfo = ({ open, onClose, item }) => {
             <VStack align="center" spacing={4}>
               {/* Product Image */}
               <Image src={item.imageURL} alt="Product Image" boxSize="150px" />
-
-              {/* Image Modal */}
-              {/* <Button onClick={onImageOpen} size='sm' colorScheme="blue">Open Image</Button>
-            <Modal isOpen={isImageOpen} onClose={onImageClose}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader align='center'>Large Image</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Image src={item.imageURL} alt="Large Product Image" />
-                </ModalBody>
-              </ModalContent>
-            </Modal> */}
 
               {/* Product Description */}
               <Text>{item.description}</Text>
@@ -106,11 +102,11 @@ const ProductInfo = ({ open, onClose, item }) => {
                 colorScheme="teal"
                 marginLeft={145}
                 marginBottom={2}
+                onClick={() => goToChat(item)}
               >
                 Contact Seller
               </Button>
             </Box>
-            {/* Comments Section */}
             <Box
               mt={8}
               bg="gray.200"
@@ -123,16 +119,7 @@ const ProductInfo = ({ open, onClose, item }) => {
               <Heading as="h3" size="md" bg="gray.200" align="center" mb={2}>
                 Comments
               </Heading>
-              {/* TODO Add comments functionality here */}
-              {/* You can use a commenting component or a form for adding comments */}
-              {/* Comments */}
               <Stack direction="column" spacing={2} mb={4} bg="gray.200">
-                {/* fixme pass item.comments */}
-                {/* {item.comments.map((comment, index) => (
-                <Box key={index} bg="gray.100" marginLeft={1} marginBottom={1} borderWidth='3px' borderRadius='lg' borderColor='gray.100'>
-                    {comment}
-                </Box>
-              ))} */}
                 <Button mt={4} colorScheme="teal" size="md">
                   Add Comment
                 </Button>
@@ -142,33 +129,6 @@ const ProductInfo = ({ open, onClose, item }) => {
         </ModalContent>
       </Modal>
     </ChakraProvider>
-
-    // <Modal isOpen={open} onClose={onClose} size="xl">
-    // <ModalOverlay />
-
-    // <ModalContent
-    //   bg={"black"}
-    //   border={"1px solid gray"}
-    //   width={"100vh"}
-    //   height={"50vh"}
-    //   position={"fixed"}
-    //   marginTop={"20vh"}
-    //   marginLeft={"300px"}
-    //   borderRadius={6}
-    // >
-    //   <ModalHeader color="white" fontSize={"large"} paddingLeft={"10px"}>
-    //     {item.name}
-    //   </ModalHeader>
-    //   <ModalCloseButton
-    //     marginLeft={"90vh"}
-    //     color={"white"}
-    //     marginTop={"-2vh"}
-    //   />
-    //   <ModalBody pb={6}>
-    //     <img src={item.imageURL} className="itemImage" />
-    //   </ModalBody>
-    // </ModalContent>
-    // </Modal>
   );
 };
 
