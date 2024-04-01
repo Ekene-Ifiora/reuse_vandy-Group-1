@@ -5,7 +5,6 @@
   "nyc": {
     "report-dir": "cypress-coverage"
   },
-  "homepage": "https://ekene-ifiora.github.io/",
   "dependencies": {
     "@ant-design/icons": "^5.3.0",
     "@babel/core": "^7.24.0",
@@ -67,9 +66,7 @@
     "open-jest-coverage": "start ./jest-coverage/lcov-report/index.html",
     "open-cypress-coverage": "start ./cypress-coverage/lcov-report/index.html",
     "combine-coverage": "istanbul-merge --out coverage/coverage-final.json jest-coverage/coverage-final.json cypress-coverage/coverage-final.json && nyc report --reporter=lcov --reporter=text --temp-dir=coverage --report-dir=coverage",
-    "open-coverage": "start ./coverage/lcov-report/index.html",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "open-coverage": "start ./coverage/lcov-report/index.html"
   },
   "eslintConfig": {
     "extends": [
