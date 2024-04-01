@@ -29,7 +29,12 @@ const ProductListing = () => {
         />
         <img src={item.imageURL} />
       </div>
-      <div className="card_header">
+      <div
+        className="card_header"
+        onClick={(e) => {
+          setSelectedProduct(item.id);
+        }}
+      >
         <h2>{item.name}</h2>
         <p>{item.description}</p>
         <p className="price">

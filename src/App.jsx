@@ -7,6 +7,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/firebase";
 import { useState } from "react";
+import CartPage from "./pages/CartPage/CartPage";
+import ChatPage from "./pages/ChatPage/ChatPage";
 
 function App() {
   const [authUser] = useAuthState(auth);
@@ -38,6 +40,13 @@ function App() {
 
           {/* Route to the profile page with dynamic username parameter */}
           <Route path="/:username" element={<ProfilePage />} />
+
+          {/* Route to the cart page*/}
+          <Route path="/:username/cart" element={<CartPage />} />
+
+          {/* Route to the chat page*/}
+          {/* <Route path="/:username/chat" element={<ChatPage />} /> */}
+          <Route path="/:username/chat" element={<ChatPage/>} />
         </Routes>
       </Router>
     </div>

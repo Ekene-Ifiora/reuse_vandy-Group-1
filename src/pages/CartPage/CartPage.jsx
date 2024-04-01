@@ -1,45 +1,123 @@
+import { useEffect, useState } from "react";
 import {
   Button,
   ChakraProvider,
   Container,
   Flex,
-  Link,
+  Image,
   Skeleton,
-  SkeletonCircle,
   Text,
   VStack,
-  Box,
 } from "@chakra-ui/react";
-import ProfileHeader from "../../components/Profile/ProfileHeader";
-import ProfileTabs from "../../components/Profile/ProfileTabs";
-import ProfilePosts from "../../components/Profile/ProfilePosts";
-import useGetUserProfileById from "../../hooks/useGetUserProfileById";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useParams } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
-import { auth } from "../../firebase/firebase";
-import { useColorMode } from "@chakra-ui/react";
-import { RiArrowGoBackLine } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
-import useGetUserProfileByUsername from "../../hooks/useGetUserProfileByUsername";
+import { auth, firestore } from "../../firebase/firebase";
+import { arrayRemove, doc, updateDoc, getDoc } from "firebase/firestore";
 import Navigation from "../../components/Navbar/Navigation";
+import useAuthStore from "../../store/authStore";
+import useShowToast from "../../hooks/useShowToast";
+import ProductInfo from "../../components/ProductPosts/ProductInfo";
+import { useNavigate } from "react-router-dom";
 
-const ProfilePage = () => {
-  const { username } = useParams();
+/**
+ * Component representing the cart page.
+ * Fetches cart items from Firestore and allows users to view, remove items from the cart, and calculate the total.
+ */
+const CartPage = () => {
   const [user] = useAuthState(auth);
+  const authUser = useAuthStore((state) => state.user);
+  const [cartItems, setCartItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const showToast = useShowToast();
   const navigate = useNavigate();
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const { isLoading, userProfile } = useGetUserProfileByUsername(username);
-  const userNotFound = !isLoading && !userProfile;
-  if (userNotFound) return <userNotFound />;
+  /**
+   * Fetches cart items from Firestore when the user is authenticated.
+   */
+  useEffect(() => {
+    if (user) {
+      const fetchCartItems = async () => {
+        try {
+          const userRef = doc(firestore, "users", authUser.uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            const cartItemIds = userData.cart || [];
+            const itemsPromises = cartItemIds.map(async (itemId) => {
+              const itemRef = doc(firestore, "posts", itemId);
+              const itemSnap = await getDoc(itemRef);
+              if (itemSnap.exists()) {
+                return { id: itemId, ...itemSnap.data() };
+              } else {
+                return null;
+              }
+            });
+            const items = await Promise.all(itemsPromises);
+            setCartItems(items.filter((item) => item !== null));
+          } else {
+            showToast("Error", "User data not found", "error");
+          }
+        } catch (error) {
+          showToast("Error", "Error fetching cart items: " + error, "error");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchCartItems();
+    }
+  }, [user, authUser]);
+
+  /**
+   * Handles contacting the seller of a product.
+   * @param {Object} item - The item whose seller needs to be contacted.
+   */
+  const handleContactSeller = (item) => {
+    if (user) {
+      navigate(`/${authUser.username}`); // Navigate using the user's UID
+    }
+    console.log("Contact seller:", item.sellerEmail);
+  };
+
+  /**
+   * Handles removing an item from the cart.
+   * @param {string} itemId - The ID of the item to be removed from the cart.
+   */
+  const handleRemoveItem = async (itemId) => {
+    try {
+      const userRef = doc(firestore, "users", authUser.uid);
+      await updateDoc(userRef, {
+        cart: arrayRemove(itemId), // Change arrayUnion to arrayRemove
+      });
+      setCartItems(cartItems.filter((item) => item.id !== itemId));
+      showToast("Success", "Removed item from cart", "success");
+    } catch (error) {
+      showToast("Error", "Error removing item from cart: " + error, "error");
+    }
+  };
+
+  /**
+   * Calculates the total price of items in the cart.
+   * @returns {number} The total price of items in the cart.
+   */
+  const calculateTotal = () => {
+    return cartItems.reduce(
+      (total, item) => total + parseInt(item.buyNowPrice),
+      0
+    );
+  };
 
   return (
-    <>
+    <ChakraProvider>
       <div className="navbar">
-        <Navigation showProfileIcon={false} showHomeIcon={true} />
+        <Navigation
+          showProfileIcon={true}
+          showHomeIcon={true}
+          showCartIcon={false}
+          showLogoutIcon={false}
+        />
       </div>
 
-      <Container maxW="container.lg" py={5} pt="60px">
+      <Container maxW="container.lg" py={5} pt="60px" marginTop={"20px"}>
         <Flex
           position="relative"
           py={10}
@@ -49,66 +127,79 @@ const ProfilePage = () => {
           mx="auto"
           flexDirection="column"
         >
-          {userProfile && <ProfileHeader />}
-        </Flex>
-        <Flex
-          px={{ base: 2, sm: 4 }}
-          maxW={"full"}
-          mx={"auto"}
-          borderTop={"1px solid"}
-          borderColor={"whiteAlpha.300"}
-          direction={"column"}
-        >
-          <ProfileTabs />
-          <ProfilePosts />
+          <Text fontSize="xl" fontWeight="bold" mb={4}>
+            Your Cart
+          </Text>
+          {isLoading ? (
+            <Skeleton width="100%" height="100px" />
+          ) : (
+            <VStack spacing={4} alignItems="flex-start" w="100%">
+              {cartItems.map((item) => (
+                <Flex
+                  key={item.id}
+                  w="100%"
+                  p={4}
+                  borderWidth="1px"
+                  borderRadius="md"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  onClick={(e) => {
+                    setSelectedProduct(item.id);
+                  }}
+                  cursor={"pointer"}
+                >
+                  <ProductInfo
+                    open={selectedProduct === item.id}
+                    onClose={() => setSelectedProduct(null)}
+                    item={item}
+                  />
+                  <Image src={item.imageURL} boxSize="80px" />
+                  <Flex
+                    direction="column"
+                    alignItems="flex-start"
+                    flex="1"
+                    ml={4}
+                  >
+                    <Text fontSize="md" fontWeight="bold" mb={2}>
+                      {item.name}
+                    </Text>
+                    <Text fontSize="sm" color="gray.600">
+                      ${item.buyNowPrice}
+                    </Text>
+                  </Flex>
+                  <Button
+                    colorScheme="blue"
+                    size="sm"
+                    onClick={() => handleContactSeller(item)}
+                  >
+                    Contact Seller
+                  </Button>
+                  <Button
+                    colorScheme="red"
+                    size="sm"
+                    onClick={() => handleRemoveItem(item.id)}
+                  >
+                    Remove
+                  </Button>
+                </Flex>
+              ))}
+            </VStack>
+          )}
+          {!isLoading && (
+            <Flex
+              w="100%"
+              justifyContent="flex-end"
+              mt={4}
+              borderTop="1px solid"
+              pt={4}
+            >
+              <Text fontWeight="bold">Total: ${calculateTotal()}</Text>
+            </Flex>
+          )}
         </Flex>
       </Container>
-    </>
+    </ChakraProvider>
   );
 };
 
-export default ProfilePage;
-
-// skeleton for profile header
-const ProfileHeaderSkeleton = () => {
-  return (
-    <Flex
-      gap={{ base: 4, sm: 10 }}
-      py={10}
-      direction={{ base: "column", sm: "row" }}
-      justifyContent={"center"}
-      alignItems={"center"}
-    >
-      <SkeletonCircle size="24" />
-
-      <VStack
-        alignItems={{ base: "center", sm: "flex-start" }}
-        gap={2}
-        mx={"auto"}
-        flex={1}
-      >
-        <Skeleton height="12px" width="150px" />
-        <Skeleton height="12px" width="100px" />
-      </VStack>
-    </Flex>
-  );
-};
-
-const UserNotFound = ({ user }) => {
-  return (
-    <Flex flexDir="column" textAlign={"center"} mx={"auto"}>
-      {user && <Text>Email: {user.email}</Text>}
-      <ProfileTabs />
-      <ProfilePosts />
-      <Link
-        as={RouterLink}
-        to={"/"}
-        color={"blue.500"}
-        w={"max-content"}
-        mx={"auto"}
-      >
-        Go home
-      </Link>
-    </Flex>
-  );
-};
+export default CartPage;

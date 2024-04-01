@@ -63,13 +63,14 @@ export const Form = styled.form`
 export const Title = styled.h1`
   font-weight: bold;
   margin: 0;
+  font-size: 35px;
 `;
 
 export const Input = styled.input`
   background-color: #eee;
   border: none;
   padding: 12px 15px;
-  margin: 8px 0;
+  margin: 5px 0;
   width: 100%;
 `;
 

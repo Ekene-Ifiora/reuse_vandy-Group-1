@@ -1,7 +1,7 @@
 // Import React hooks and functions from external files and Firebase SDK
 import { useState } from "react";
 import useShowToast from "./useShowToast";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 
 // Define a custom React hook named useSearchProduct
@@ -22,6 +22,7 @@ const useSearchProduct = () => {
     try {
       // Initialize an empty array to store matching items
       const matchItems = [];
+      itemName = itemName.charAt(0).toUpperCase() + itemName.slice(1);
 
       if (!itemName.trim()) {
         // If the search field is empty, clear the items and return
