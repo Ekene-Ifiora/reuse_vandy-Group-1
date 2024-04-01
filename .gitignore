@@ -1,0 +1,8 @@
+.idea
+cypress
+.nyc_output
+build
+coverage
+cypress-coverage
+jest-coverage
+node_modules
