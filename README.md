@@ -33,6 +33,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Deployment Instructions
 
+Note that our project is currently deployed on Marcus Kamen's vercel account at https://reuse-vandy-group-1.vercel.app/.
+
 1) Run the command `npm i -g vercel`.
 2) Create an account at https://www.vercel.com.
 3) Run the command `vercel login` and log into your account.
