@@ -25,6 +25,20 @@ To coordinate the production of our product, we will use Git and GitHub. GitHub 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Installation Instructions
+
+1) Make sure node.js is installed on your computer. If it is not, go to https://nodejs.org/en to install.
+2) Run the command `npm install` in the terminal in the root directory of the project.
+3) You should be ready to run our scripts. Run the script `npm start` to view the application in the development server.
+
+## Deployment Instructions
+
+1) Run the command `npm i -g vercel`.
+2) Create an account at https://www.vercel.com.
+3) Run the command `vercel login` and log into your account.
+4) Run the command `vercel` in the root directory of the project. Follow instructions from the command. Once finished, the project will be deployed on https://[project name].vercel.app.
+5) Redeploy by rerunning the command `vercel`.
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -40,7 +54,7 @@ You may also see any lint errors in the console.
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information. Runs both frontend tests with cypress and backend tests with jest, then opens the combined coverage report if all tests pass.
 
 ### `npm run build`
 
@@ -62,7 +76,35 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+### `npm run backend`
+
+Runs the backend tests individually.
+
+### `npm run frontend`
+
+Runs the frontend tests individually.
+
+### `npm run cypressUI`
+
+Opens the cypress application for writing frontend tests.
+
+### `npm run open-jest-coverage`
+
+Opens the coverage report for the backend tests. This script should only be run after `npm run backend`.
+
+### `npm run open-cypress-coverage`
+
+Opens the coverage report for the frontend tests. This script should only be run after `npm run frontend`.
+
+### `npm run combine-coverage`
+
+Combines the coverage reports for the frontend and backend tests. This script should only be run after `npm run frontend` and `npm run backend`.
+
+### `npm run open-coverage`
+
+Opens the combined coverage report. This script should only be run after `npm run combine-coverage`.
+
+## Learn More About React
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
