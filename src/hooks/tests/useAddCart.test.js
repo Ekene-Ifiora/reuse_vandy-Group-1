@@ -5,7 +5,6 @@ import useAuthStore from "../../store/authStore";
 import { arrayUnion, doc, updateDoc, getDoc } from "firebase/firestore";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import useShowToast from "../useShowToast";
-import { ConstructionOutlined } from '@mui/icons-material';
 
 jest.mock('firebase/firestore');
 jest.mock('../../store/authStore');

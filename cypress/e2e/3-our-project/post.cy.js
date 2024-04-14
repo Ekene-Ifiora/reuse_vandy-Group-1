@@ -74,7 +74,7 @@ describe('post tests', () => {
         cy.get('.chakra-button').click();
         cy.get('#toast-1-description').click();
         cy.get('.css-1pq15d > .chakra-icon').click();
-        cy.get('.profile-container > .nav-icons').click();
+        cy.get('.sb-avatar__image').click();
         cy.get(':nth-child(1) > .css-1rmkh0t > .css-1cp8gch').click();
         cy.get('.chakra-icon > path').click();
         cy.get(':nth-child(1) > .css-1rmkh0t > .css-1cp8gch').click();
