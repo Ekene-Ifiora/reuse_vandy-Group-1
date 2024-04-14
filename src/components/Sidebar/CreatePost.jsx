@@ -157,7 +157,7 @@ const CreatePost = () => {
               <option value="true">Yes</option>
               <option value="false">No</option>
             </Select>
-            {inputs.inAuction && (
+            {inputs.inAuction == "true" && (
               <Input
                 type="date"
                 placeholder="Date"
@@ -168,7 +168,8 @@ const CreatePost = () => {
                 color="black"
               />
             )}
-            {inputs.inAuction && (
+            {console.log(inputs.inAuction)}
+            {inputs.inAuction == "true" && (
               <Input
                 type="time"
                 placeholder="Time"

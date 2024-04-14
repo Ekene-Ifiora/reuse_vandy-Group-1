@@ -1,11 +1,18 @@
 import "./ProductInfo.css";
 import React from "react";
-import { MdDelete } from "react-icons/md";
-import { Box, Image, Heading, Text, Button, VStack } from "@chakra-ui/react";
-import Navigation from "../../components/Navbar/Navigation";
-import { ChakraProvider } from "@chakra-ui/react";
-import Comment from "../Comment/Comment";
 import {
+  Box,
+  Image,
+  Heading,
+  Text,
+  Tag,
+  Button,
+  Stack,
+  VStack,
+  HStack,
+  FormControl,
+  FormLabel,
+  Input,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -13,6 +20,19 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
+import { firestore, storage } from "../../firebase/firebase";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
+import useShowToast from "../../hooks/useShowToast";
+import Navigation from "../../components/Navbar/Navigation";
+import { ChakraProvider } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/authStore";
@@ -20,32 +40,104 @@ import ChatPage from "../../pages/ChatPage/ChatPage";
 import { newChat } from "react-chat-engine";
 import { useState } from "react";
 import { deleteObject, ref } from "firebase/storage";
-import { firestore, storage } from "../../firebase/firebase";
-import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
-import useShowToast from "../../hooks/useShowToast";
+import { arrayRemove, deleteDoc } from "firebase/firestore";
 import usePostStore from "../../store/postStore";
 import useUserProfileStore from "../../store/userProfileStore";
 import useGetUserProfileById from "../../hooks/useGetUserProfileById";
 import { Link } from "react-router-dom";
 import { Avatar, Flex, Skeleton, SkeletonCircle } from "@chakra-ui/react";
 import PostFooter from "../ProductPosts/PostFooter";
+import { useEffect } from "react";
+import bidStore from "../../store/bidStore";
+import { useLocation } from "react-router-dom";
+import useCreateBid from "../../hooks/useCreateBid";
+import { ModalFooter } from "@chakra-ui/react";
+import Comment from "../Comment/Comment";
+import { MdDelete } from "react-icons/md";
 
 const ProductInfo = ({ open, onClose, item }) => {
-  const { isImageOpen, onImageOpen, onImageClose } = useDisclosure();
+  const { isOpen: isAuctionOpen, onOpen: onAuctionOpen, onClose: onAuctionClose } = useDisclosure();
+  const { isOpen: isBidOpen, onOpen: onBidOpen, onClose: onBidClose } = useDisclosure();
+  const [inputs, setInputs] = useState({
+    item: "",
+    bid: 0, 
+    createdAt: Date.now(),
+    createdBy: "",
+  });
   const navigate = useNavigate();
   const authUser = useAuthStore((state) => state.user);
   const [isDeleting, setIsDeleting] = useState(false);
-  const showToast = useShowToast();
   const deletePost = usePostStore((state) => state.deletePost);
   const decrementPostsCount = useUserProfileStore((state) => state.deletePost);
   const { userProfile, isLoading } = useGetUserProfileById(item.createdBy);
+  const showToast = useShowToast();
+  const { isLoadingtwo, handleCreateBid } = useCreateBid();
+  const handleBidCreation = async () => {
+    try {
+      await handleCreateBid(item, inputs);
+      onAuctionClose();
+      setInputs({
+        item: "",
+        bid: 0,
+        createdAt: Date.now(),
+        createdBy: "",
+      });
+    } catch (error) {
+      showToast("Error", 'check', "error");
+    }
+  };
+  // console.log(authUser)
+  // console.log(item)
 
+  const [bidderProfiles, setBidderProfiles] = useState({});
+
+  useEffect(() => {
+    const fetchBidderProfiles = async () => {
+        const profiles = {};
+        console.log("Starting to fetch bidder profiles...");
+
+        const sortedBids = item.bids.sort((a, b) => b.bid - a.bid);
+
+        await Promise.all(sortedBids.map(async (bid) => {
+            console.log("Processing bid", bid)
+            console.log("Processing bid with UID:", bid.createdBy);
+            if (!bid.createdBy) {
+              console.error("Missing or invalid UID for bid:", bid);
+              return;
+            }
+            const bidderDocRef = doc(firestore, "users", bid.createdBy);
+            const docSnap = await getDoc(bidderDocRef);
+            if (docSnap.exists()) {
+                profiles[bid.createdBy] = docSnap.data();
+            }
+        }));
+
+        setBidderProfiles(profiles);
+    };
+
+    if (item.bids && item.bids.length > 0) {
+        fetchBidderProfiles();
+    }
+  }, [item.bids, firestore]);
+
+  // console.log("BidderProfiles", bidderProfiles)
   const goToChat = (item) => {
     if (authUser) {
       <ChatPage sellerUsername={item.sellerName} />;
       navigate(`/${authUser.username}/chat`); // Navigate using the user's UID
     }
   };
+
+  const contactBidder = (bidderProfile) => {
+    if (authUser) {
+      <ChatPage bidderUsername={bidderProfile.fullName} />
+      navigate(`/${authUser.username}/chat`); // Navigate using the user's UID
+    }
+  };
+
+  const auctionEndTime = new Date(`${item.auctionDateEnd}T${item.auctionTimeEnd}`);
+  const currentTime = new Date();
+  const hasAuctionEnded = currentTime > auctionEndTime;
 
   const handleDeletePost = async () => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
@@ -102,21 +194,99 @@ const ProductInfo = ({ open, onClose, item }) => {
                 {/* Product Description */}
                 <Text>{item.description}</Text>
 
-                <Text as="b">Buy Now Price: {"$" + item.buyNowPrice}</Text>
+                {!item.inAuction && <Text as="b">Buy Now Price: {"$" + item.buyNowPrice}</Text>}
                 {/* Auction Details */}
                 {item.inAuction && (
                   <VStack spacing={2}>
-                    <Button colorScheme="teal" size="md">
-                      Participate in Auction
-                    </Button>
-
-                    <Text>Starting Price: {item.startingPrice}</Text>
-                    <Text>Current Price: {item.currentPrice}</Text>
-                    <Text>Time Remaining: {item.timeRemaining}</Text>
+                    {item.createdBy !== authUser.uid ? (
+                      <HStack spacing={2}>
+                        {hasAuctionEnded ? (
+                            <Text>The time for this auction has passed.</Text>
+                        ) : (
+                            <Button colorScheme="teal" size="md" onClick={onAuctionOpen}>
+                                Participate in Auction
+                            </Button>
+                        )}
+                        <Button colorScheme="teal" size="md" onClick={onBidOpen}>
+                          Show Current Bid
+                        </Button>
+                      </HStack>
+                    ) : (
+                        <div>You cannot participate in your own auction.</div>
+                    )}
                   </VStack>
                 )}
               </VStack>
               {/* Seller Information */}
+
+            <Modal isOpen={isAuctionOpen} onClose={onAuctionClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Place Your Bid</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <p>Enter your bid for {item.name}.</p>
+
+                  <FormControl>
+                  <Input
+                    placeholder={'Your Bid'}
+                    size={"sm"}
+                    type={"text"}
+                    onChange={(e) =>
+                      setInputs({ ...inputs, bid: e.target.value,})
+                    }
+                  />
+                </FormControl>
+
+                </ModalBody>
+                <ModalFooter>
+                  <Button colorScheme="blue" mr={3} onClick={onAuctionClose}>
+                    Close
+                  </Button>
+                  <Button variant="ghost" onClick={handleBidCreation} isLoadingtwo={isLoadingtwo} >Submit Bid</Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+
+            <Modal isOpen={isBidOpen} onClose={onBidClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Bids for {item.name}</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <VStack spacing={4}>
+                    <Text>Top Three Bids</Text>
+                    {item.bids && item.bids.length > 0 ? (
+                      item.bids.slice(0, 3).map((bid, index) => {
+                          const bidderProfile = bidderProfiles[bid.createdBy];
+                          return bidderProfile ? (
+                              <HStack key={index} align="start" w="full">
+                                  <Avatar src={bidderProfile.profilePicURL} />
+                                  <VStack>
+                                    <Text>{bidderProfile.fullName} bid: ${bid.bid}</Text>
+                                    <Button
+                                      mt={4}
+                                      colorScheme="teal"
+                                      marginLeft={145}
+                                      marginBottom={2}
+                                      onClick={() => contactBidder(bidderProfile)}
+                                    >
+                                      Contact Bidder
+                                    </Button>
+                                  </VStack>
+                              </HStack>
+                          ) : (
+                              <Text key={index}>No BidderProfile</Text>
+                          );
+                      })
+                    ) : (
+                      <Text>There are no bids yet.</Text>
+                    )}
+                  </VStack>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+
               <Box
                 mt={8}
                 bg="#fe8033"
@@ -243,3 +413,40 @@ const ProductInfo = ({ open, onClose, item }) => {
 };
 
 export default ProductInfo;
+
+// function useCreateBid() {
+//   const showToast = useShowToast();
+//   const [isLoading, setIsLoading] = useState(false);
+//   const authUser = useAuthStore((state) => state.user);
+//   const createBid = bidStore((state) => state.createBid);
+//   const addBid = usePostStore((state) => state.addBid);
+//   const { pathname } = useLocation();
+
+//   const handleCreateBid = async (item, inputs) => {
+//     if (isLoading) return;
+//     inputs.item = item.id;
+//     inputs.createdBy = authUser.uid; 
+//     if (!inputs.bid) throw new Error("Please input bid amount");
+
+//     setIsLoading(true);
+//     const newBid = inputs;
+
+//     try {
+//       const bidDocRef = await addDoc(collection(firestore, "bids"), newBid);
+//       const postDocRef = doc(firestore, "posts", item.id);
+
+//       await updateDoc(postDocRef, { bids: arrayUnion({ ...newBid, id: bidDocRef.id }) });
+
+//       if (authUser.uid) {
+//         createBid({ ...newBid, id: bidDocRef.id });
+//         addBid(item.id, { ...newBid, id: bidDocRef.id })
+//       }
+//       showToast("Success", "Bid sent successfully", "success");
+//     } catch (error) {
+//       showToast("Error", error.message, "error");
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+//   return { isLoading, handleCreateBid };
+// }
