@@ -38,9 +38,9 @@ import EditPost from "./EditPost";
 export const ProfilePost = ({ post }) => {
   const [isDetailsOpen, setDetailsOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
-  const userProfile = useUserProfileStore((state) => state.userProfile)
-  const authUser = useAuthStore((state) => state.user)
-  const showToast = useShowToast()
+  const userProfile = useUserProfileStore((state) => state.userProfile);
+  const authUser = useAuthStore((state) => state.user);
+  const showToast = useShowToast();
   const [isDeleting, setIsDeleting] = useState(false);
   const deletePost = usePostStore((state) => state.deletePost);
   const decrementPostsCount = useUserProfileStore((state) => state.deletePost);
@@ -49,7 +49,7 @@ export const ProfilePost = ({ post }) => {
 
   const handleDetailsOpen = () => {
     setDetailsOpen(true);
-    setEditOpen(false); 
+    setEditOpen(false);
   };
 
   const handleDetailsClose = () => {
@@ -58,7 +58,7 @@ export const ProfilePost = ({ post }) => {
 
   const handleEditOpen = () => {
     setEditOpen(true);
-    setDetailsOpen(false); 
+    setDetailsOpen(false);
   };
 
   const handleEditClose = () => {
@@ -66,28 +66,28 @@ export const ProfilePost = ({ post }) => {
   };
 
   const handleDeletePost = async () => {
-		if (!window.confirm("Are you sure you want to delete this post?")) return;
-		if (isDeleting) return;
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+    if (isDeleting) return;
 
-		try {
-			const imageRef = ref(storage, `posts/${post.id}`);
-			await deleteObject(imageRef);
-			const userRef = doc(firestore, "users", authUser.uid);
-			await deleteDoc(doc(firestore, "posts", post.id));
+    try {
+      const imageRef = ref(storage, `posts/${post.id}`);
+      await deleteObject(imageRef);
+      const userRef = doc(firestore, "users", authUser.uid);
+      await deleteDoc(doc(firestore, "posts", post.id));
 
-			await updateDoc(userRef, {
-				posts: arrayRemove(post.id),
-			});
+      await updateDoc(userRef, {
+        posts: arrayRemove(post.id),
+      });
 
-			deletePost(post.id);
-			decrementPostsCount(post.id);
-			showToast("Success", "Post deleted successfully", "success");
-		} catch (error) {
-			showToast("Error", error.message, "error");
-		} finally {
-			setIsDeleting(false);
-		}
-	};
+      deletePost(post.id);
+      decrementPostsCount(post.id);
+      showToast("Success", "Post deleted successfully", "success");
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <ChakraProvider>
@@ -117,14 +117,14 @@ export const ProfilePost = ({ post }) => {
           >
             <Flex alignItems={"center"} justifyContent={"center"} gap={50}>
               <Flex>
-                <FaDollarSign size={20} color={"white"}/>
+                <FaDollarSign size={20} color={"white"} />
                 <Text fontWeight={"bold"} ml={2} color={"white"}>
                   {post.buyNowPrice}
                 </Text>
               </Flex>
 
               <Flex>
-                <FaComment size={20} color={"white"}/>
+                <FaComment size={20} color={"white"} />
                 <Text fontWeight={"bold"} ml={2} color={"white"}>
                   {post.comments.length}
                 </Text>
@@ -191,18 +191,17 @@ export const ProfilePost = ({ post }) => {
 
                     {authUser?.uid === userProfile.uid && (
                       <Button
-                      size={"sm"}
-                      bg={"transparent"}
-                      _hover={{ bg: "whiteAlpha.300", color: "white" }}
-                      borderRadius={4}
-                      p={1}
-                      onClick={handleDeletePost}
-                      isLoading={isDeleting}
-                    >
-                      <MdDelete size={20} cursor="pointer" />
-                    </Button>
+                        size={"sm"}
+                        bg={"transparent"}
+                        _hover={{ bg: "whiteAlpha.300", color: "white" }}
+                        borderRadius={4}
+                        p={1}
+                        onClick={handleDeletePost}
+                        isLoading={isDeleting}
+                      >
+                        <MdDelete size={20} cursor="pointer" />
+                      </Button>
                     )}
-                    
                   </Flex>
                   <Divider my={4} bg={"gray.500"} />
 
@@ -218,11 +217,19 @@ export const ProfilePost = ({ post }) => {
                   </VStack>
                   <Divider my={4} bg={"gray.800"} />
 
-                  <PostFooter post={post} username={userProfile.username} isProfilePage={true}/>
+                  <PostFooter
+                    post={post}
+                    username={userProfile.username}
+                    isProfilePage={true}
+                  />
 
                   {visitingOwnProfileAndAuth && (
-                    <Flex gap={1} alignItems={"center"} justifyContent={"flex-end"}>
-                      <CiEdit size={20}/>
+                    <Flex
+                      gap={1}
+                      alignItems={"center"}
+                      justifyContent={"flex-end"}
+                    >
+                      <CiEdit size={20} />
                       <ChakraProvider>
                         <Button
                           bg={"white"}
@@ -236,14 +243,15 @@ export const ProfilePost = ({ post }) => {
                       </ChakraProvider>
                     </Flex>
                   )}
-
                 </Flex>
               </Flex>
             </ModalBody>
           </ModalContent>
         </Modal>
 
-        {isEditOpen && <EditPost post={post} isOpen={isEditOpen} onClose={handleEditClose} />}
+        {isEditOpen && (
+          <EditPost post={post} isOpen={isEditOpen} onClose={handleEditClose} />
+        )}
       </>
     </ChakraProvider>
   );

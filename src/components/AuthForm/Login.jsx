@@ -3,10 +3,16 @@ import React, { useState } from "react";
 import useLogin from "../../hooks/useLogin";
 import useShowToast from "../../hooks/useShowToast";
 import { ChakraProvider } from "@chakra-ui/react";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../../firebase/firebase";
+import { useNavigate } from "react-router-dom";
+import useForgotPassword from "../../hooks/useForgotPassword";
 
 const Login = () => {
   // State for storing email and password inputs
   const showToast = useShowToast();
+  const { forgotPass } = useForgotPassword();
+
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -20,12 +26,17 @@ const Login = () => {
     }
   };
 
+  const fPass = (e) => {
+    e.preventDefault();
+    forgotPass(inputs, e);
+  };
+
   // Custom hook for handling login functionality
   const { loading, error, login } = useLogin();
 
   return (
     <ChakraProvider>
-      <Components.Form onSubmit={signIn}>
+      <Components.Form onSubmit={(e) => signIn(e)}>
         <Components.Title>Sign in</Components.Title>
         <Components.Input
           type="email"
@@ -40,7 +51,18 @@ const Login = () => {
           value={inputs.password}
           onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
         />
-        <Components.Anchor href="#">Forgot your password?</Components.Anchor>
+        <Components.Button
+          onClick={(e) => fPass(e)}
+          style={{
+            cursor: "pointer",
+            background: "transparent",
+            color: "black",
+            border: "none",
+            fontSize: "10",
+          }}
+        >
+          Forgot your password?
+        </Components.Button>
 
         <Components.Button type="submit" isLoading={loading}>
           Sign In

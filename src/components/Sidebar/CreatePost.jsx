@@ -51,6 +51,9 @@ const CreatePost = () => {
     comments: [],
     createdAt: Date.now(),
     createdBy: "",
+    inAuction: "",
+    auctionDateEnd: "",
+    auctionTimeEnd: "",
   });
   const imageRef = useRef(null);
   const { handleImageChange, selectedFile, setSelectedFile } = usePreviewImg();
@@ -143,6 +146,39 @@ const CreatePost = () => {
               <option value="EBI">EBI</option>
               <option value="Rothschild">Rothschild</option>
             </Select>
+            <Select
+              placeholder="Create Auction"
+              value={inputs.inAuction}
+              onChange={(e) =>
+                setInputs({ ...inputs, inAuction: e.target.value })
+              }
+              marginBottom={"5px"}
+            >
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </Select>
+            {inputs.inAuction && (
+              <Input
+                type="date"
+                placeholder="Date"
+                value={inputs.auctionDateEnd}
+                onChange={(e) =>
+                  setInputs({ ...inputs, auctionDateEnd: e.target.value })
+                }
+                color="black"
+              />
+            )}
+            {inputs.inAuction && (
+              <Input
+                type="time"
+                placeholder="Time"
+                value={inputs.auctionTimeEnd}
+                onChange={(e) =>
+                  setInputs({ ...inputs, auctionTimeEnd: e.target.value })
+                }
+                color="black"
+              />
+            )}
             <Input
               type="number"
               placeholder="Price"

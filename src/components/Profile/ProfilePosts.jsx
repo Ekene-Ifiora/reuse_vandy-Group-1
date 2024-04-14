@@ -9,8 +9,8 @@ const ProfilePosts = () => {
 	const noPostsFound = !isLoading && posts.length === 0;
 	if (noPostsFound) return <NoPostsFound />;
 	
-	console.log(Array.isArray(posts) ? 'Array' : 'Not an Array');
-	console.log(posts)
+	// console.log(Array.isArray(posts) ? 'Array' : 'Not an Array');
+	// console.log(posts)
 
 	return (
 	<ChakraProvider>

@@ -1,0 +1,13 @@
+.cartBody {
+  height: 100vh;
+  width: 100vw;
+  background-color: white;
+}
+
+.items:hover {
+  background-color: #2b3039;
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+  cursor: pointer;
+  border-color: #2b3039;
+}

@@ -9,6 +9,7 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
+import { sendEmailVerification } from "firebase/auth";
 import useShowToast from "./useShowToast";
 import useAuthStore from "../store/authStore";
 
@@ -79,11 +80,15 @@ const useSignUpWithEmailAndPassword = () => {
           chats: [],
           friends: [],
           createdAt: Date.now(),
-          cart:[],
+          cart: [],
+          isAdmin: false,
         };
 
         // Set the user document in Firestore
         await setDoc(doc(firestore, "users", newUser.user.uid), userDoc);
+
+        //verify the user email
+        await sendEmailVerification(newUser.user);
 
         // Save user information to local storage
         localStorage.setItem("user-info", JSON.stringify(userDoc));

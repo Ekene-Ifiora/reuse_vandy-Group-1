@@ -9,6 +9,7 @@ import { auth } from "./firebase/firebase";
 import { useState } from "react";
 import CartPage from "./pages/CartPage/CartPage";
 import ChatPage from "./pages/ChatPage/ChatPage";
+import UserListPage from "./pages/UsersPage/UsersListPage";
 
 function App() {
   const [authUser] = useAuthState(auth);
@@ -44,9 +45,12 @@ function App() {
           {/* Route to the cart page*/}
           <Route path="/:username/cart" element={<CartPage />} />
 
+          {/* Route to the cart page*/}
+          <Route path="/:username/userslist" element={<UserListPage />} />
+
           {/* Route to the chat page*/}
           {/* <Route path="/:username/chat" element={<ChatPage />} /> */}
-          <Route path="/:username/chat" element={<ChatPage/>} />
+          <Route path="/:username/chat" element={<ChatPage />} />
         </Routes>
       </Router>
     </div>

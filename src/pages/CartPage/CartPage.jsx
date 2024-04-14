@@ -17,6 +17,7 @@ import useAuthStore from "../../store/authStore";
 import useShowToast from "../../hooks/useShowToast";
 import ProductInfo from "../../components/ProductPosts/ProductInfo";
 import { useNavigate } from "react-router-dom";
+import "./CartPage.css";
 
 /**
  * Component representing the cart page.
@@ -73,9 +74,9 @@ const CartPage = () => {
    */
   const handleContactSeller = (item) => {
     if (user) {
-      navigate(`/${authUser.username}`); // Navigate using the user's UID
+      navigate(`/${authUser.username}/chat`); // Navigate using the user's UID
     }
-    console.log("Contact seller:", item.sellerEmail);
+    // console.log("Contact seller:", item.sellerEmail);
   };
 
   /**
@@ -107,98 +108,111 @@ const CartPage = () => {
   };
 
   return (
-    <ChakraProvider>
-      <div className="navbar">
-        <Navigation
-          showProfileIcon={true}
-          showHomeIcon={true}
-          showCartIcon={false}
-          showLogoutIcon={false}
-        />
-      </div>
+    <div className="cartBody">
+      <ChakraProvider>
+        <div className="navbar">
+          <Navigation
+            showProfileIcon={true}
+            showHomeIcon={true}
+            showCartIcon={false}
+            showLogoutIcon={false}
+          />
+        </div>
 
-      <Container maxW="container.lg" py={5} pt="60px" marginTop={"20px"}>
-        <Flex
-          position="relative"
-          py={10}
-          px={4}
-          pl={{ base: 4, md: 10 }}
-          w="full"
-          mx="auto"
-          flexDirection="column"
-        >
-          <Text fontSize="xl" fontWeight="bold" mb={4}>
-            Your Cart
-          </Text>
-          {isLoading ? (
-            <Skeleton width="100%" height="100px" />
-          ) : (
-            <VStack spacing={4} alignItems="flex-start" w="100%">
-              {cartItems.map((item) => (
-                <Flex
-                  key={item.id}
-                  w="100%"
-                  p={4}
-                  borderWidth="1px"
-                  borderRadius="md"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  onClick={(e) => {
-                    setSelectedProduct(item.id);
-                  }}
-                  cursor={"pointer"}
-                >
-                  <ProductInfo
-                    open={selectedProduct === item.id}
-                    onClose={() => setSelectedProduct(null)}
-                    item={item}
-                  />
-                  <Image src={item.imageURL} boxSize="80px" />
-                  <Flex
-                    direction="column"
-                    alignItems="flex-start"
-                    flex="1"
-                    ml={4}
-                  >
-                    <Text fontSize="md" fontWeight="bold" mb={2}>
-                      {item.name}
-                    </Text>
-                    <Text fontSize="sm" color="gray.600">
-                      ${item.buyNowPrice}
-                    </Text>
-                  </Flex>
-                  <Button
-                    colorScheme="blue"
-                    size="sm"
-                    onClick={() => handleContactSeller(item)}
-                  >
-                    Contact Seller
-                  </Button>
-                  <Button
-                    colorScheme="red"
-                    size="sm"
-                    onClick={() => handleRemoveItem(item.id)}
-                  >
-                    Remove
-                  </Button>
-                </Flex>
-              ))}
-            </VStack>
-          )}
-          {!isLoading && (
+        <div className="cartBody">
+          <Container maxW="container.lg" py={5} pt="60px" marginTop={"20px"}>
             <Flex
-              w="100%"
-              justifyContent="flex-end"
-              mt={4}
-              borderTop="1px solid"
-              pt={4}
+              position="relative"
+              py={10}
+              px={4}
+              pl={{ base: 4, md: 10 }}
+              w="full"
+              mx="auto"
+              flexDirection="column"
             >
-              <Text fontWeight="bold">Total: ${calculateTotal()}</Text>
+              <Text fontSize="xl" fontWeight="bold" mb={4}>
+                Your Cart
+              </Text>
+              {isLoading ? (
+                <Skeleton width="100%" height="100px" />
+              ) : (
+                <VStack spacing={4} alignItems="flex-start" w="100%">
+                  {cartItems.map((item) => (
+                    <Flex
+                      key={item.id}
+                      w="100%"
+                      p={4}
+                      borderWidth="1px"
+                      borderRadius="md"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      _hover={{ bg: "black", color: "white" }}
+                      bg={"transparent"}
+                      cursor={"pointer"}
+                      className="items"
+                    >
+                      <ProductInfo
+                        open={selectedProduct === item.id}
+                        onClose={() => setSelectedProduct(null)}
+                        item={item}
+                      />
+                      <Image
+                        src={item.imageURL}
+                        borderRadius={"20px"}
+                        boxSize="80px"
+                        onClick={(e) => {
+                          setSelectedProduct(item.id);
+                        }}
+                      />
+                      <Flex
+                        direction="column"
+                        alignItems="flex-start"
+                        flex="1"
+                        ml={4}
+                        onClick={(e) => {
+                          setSelectedProduct(item.id);
+                        }}
+                      >
+                        <Text fontSize="md" fontWeight="bold" mb={2}>
+                          {item.name}
+                        </Text>
+                        <Text fontSize="sm">${item.buyNowPrice}</Text>
+                      </Flex>
+                      <Button
+                        colorScheme="blue"
+                        size="sm"
+                        onClick={() => handleContactSeller(item)}
+                      >
+                        Contact Seller
+                      </Button>
+                      <Button
+                        colorScheme="red"
+                        size="sm"
+                        onClick={() => handleRemoveItem(item.id)}
+                      >
+                        Remove
+                      </Button>
+                    </Flex>
+                  ))}
+                </VStack>
+              )}
+              {!isLoading && (
+                <Flex
+                  w="100%"
+                  justifyContent="flex-end"
+                  mt={4}
+                  borderTop="1px solid"
+                  pt={4}
+                  color={"black"}
+                >
+                  <Text fontWeight="bold">Total: ${calculateTotal()}</Text>
+                </Flex>
+              )}
             </Flex>
-          )}
-        </Flex>
-      </Container>
-    </ChakraProvider>
+          </Container>
+        </div>
+      </ChakraProvider>
+    </div>
   );
 };
 

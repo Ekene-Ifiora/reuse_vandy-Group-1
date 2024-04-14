@@ -14,15 +14,14 @@ import { getStorage } from "firebase/storage";
 };*/
 
 const firebaseConfig = {
-	apiKey: "AIzaSyDxqFwKAN9ODT_A7CaDwxTnCIqphxUp_ZA",
-	authDomain: "insta-clone-v1-e1f66.firebaseapp.com",
-	projectId: "insta-clone-v1-e1f66",
-	storageBucket: "insta-clone-v1-e1f66.appspot.com",
-	messagingSenderId: "61607030090",
-	appId: "1:61607030090:web:44012c94d6a1f08c08e5b3",
-	measurementId: "G-4LQ0DSPC8V"
+  apiKey: "AIzaSyDxqFwKAN9ODT_A7CaDwxTnCIqphxUp_ZA",
+  authDomain: "insta-clone-v1-e1f66.firebaseapp.com",
+  projectId: "insta-clone-v1-e1f66",
+  storageBucket: "insta-clone-v1-e1f66.appspot.com",
+  messagingSenderId: "61607030090",
+  appId: "1:61607030090:web:44012c94d6a1f08c08e5b3",
+  measurementId: "G-4LQ0DSPC8V",
 };
-
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -30,4 +29,3 @@ const firestore = getFirestore(app);
 const storage = getStorage(app);
 
 export { app, auth, firestore, storage };
-

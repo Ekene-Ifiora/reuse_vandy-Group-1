@@ -13,17 +13,38 @@ import useUserProfileStore from "../../store/userProfileStore";
 import useAuthStore from "../../store/authStore";
 import EditProfile from "./EditProfile";
 import useFollowUser from "../../hooks/useFollowUser";
+import "./ProfileHeader.css";
+import useShowToast from "../../hooks/useShowToast";
+import useDeleteAccount from "../../hooks/useDeleteAccount";
+import useMakeAdmin from "../../hooks/useMakeAdmin";
 
 const ProfileHeader = () => {
-  const userProfile = useUserProfileStore((state) => state.userProfile)
+  const userProfile = useUserProfileStore((state) => state.userProfile);
   // const { userProfile } = useUserProfileStore();
+  const { makeAdmin, unmakeAdmin } = useMakeAdmin();
   const authUser = useAuthStore((state) => state.user);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const showToast = useShowToast();
+  const { deleteAccount } = useDeleteAccount();
   // const { isFollowing, isUpdating, handleFollowUser } = useFollowUser(userProfile?.uid);
   const visitingOwnProfileAndAuth =
     authUser && authUser.username === userProfile.username;
   const visitingAnotherProfileAndAuth =
     authUser && authUser.username !== userProfile.username;
+
+  const DeleteUser = (user, e) => {
+    e.preventDefault();
+    // console.log("User info: " + user);
+    deleteAccount(user, e);
+  };
+
+  const MakeAdmin = (user) => {
+    makeAdmin(user);
+  };
+
+  const RemoveAdmin = (user) => {
+    unmakeAdmin(user);
+  };
 
   return (
     <ChakraProvider>
@@ -31,6 +52,8 @@ const ProfileHeader = () => {
         gap={{ base: 4, sm: 10 }}
         py={10}
         direction={{ base: "column", sm: "row" }}
+        // bg={"#272b34"}
+        width={"100vw"}
       >
         <AvatarGroup
           size={{ base: "xl", md: "2xl" }}
@@ -49,15 +72,15 @@ const ProfileHeader = () => {
             alignItems={"center"}
             w={"full"}
           >
-            <Text fontSize={{ base: "sm", md: "lg" }}>
-              {userProfile.username}
+            <Text fontSize={{ base: "sm", md: "lg" }} fontWeight={"bold"}>
+              {userProfile.fullName}
             </Text>
             {visitingOwnProfileAndAuth && (
               <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
                 <ChakraProvider>
                   <Button
-                    bg={"white"}
-                    color={"black"}
+                    bg={"blue"}
+                    color={"white"}
                     _hover={{ bg: "whiteAlpha.800" }}
                     size={{ base: "xs", md: "sm" }}
                     onClick={onOpen}
@@ -65,20 +88,65 @@ const ProfileHeader = () => {
                     Edit Profile
                   </Button>
                 </ChakraProvider>
+                {authUser.isAdmin && (
+                  <Button
+                    bg={"#272b34"}
+                    color={"white"}
+                    className="box"
+                    size={{ base: "xs", md: "sm" }}
+                  >
+                    ADMIN
+                  </Button>
+                )}
+
+                <Button
+                  bg={"Red"}
+                  color={"white"}
+                  _hover={{ bg: "blue.600" }}
+                  size={{ base: "xs", md: "sm" }}
+                  onClick={(e) => DeleteUser(authUser, e)}
+                >
+                  Delete Account
+                </Button>
               </Flex>
             )}
             {visitingAnotherProfileAndAuth && (
               <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
                 <ChakraProvider>
-                  <Button
-                    bg={"black"}
-                    color={"white"}
-                    _hover={{ bg: "blue.600" }}
-                    size={{ base: "xs", md: "sm" }}
-                    // onClick={onOpen}
-                  >
-                    Follow
-                  </Button>
+                  {console.log("User profile: " + userProfile.isAdmin)}
+                  {userProfile.isAdmin && (
+                    <Button
+                      bg={"#272b34"}
+                      color={"white"}
+                      className="box"
+                      size={{ base: "xs", md: "sm" }}
+                    >
+                      ADMIN
+                    </Button>
+                  )}
+
+                  {!userProfile.isAdmin && (
+                    <Button
+                      bg={"#272b34"}
+                      color={"white"}
+                      className="box"
+                      size={{ base: "xs", md: "sm" }}
+                      onClick={() => MakeAdmin(userProfile)}
+                    >
+                      Make ADMIN
+                    </Button>
+                  )}
+                  {authUser.isAdmin && userProfile.isAdmin && (
+                    <Button
+                      bg={"Red"}
+                      color={"white"}
+                      _hover={{ bg: "blue.600" }}
+                      size={{ base: "xs", md: "sm" }}
+                      onClick={() => RemoveAdmin(userProfile)}
+                    >
+                      Remove Admin
+                    </Button>
+                  )}
                 </ChakraProvider>
               </Flex>
             )}
@@ -91,22 +159,10 @@ const ProfileHeader = () => {
               </Text>
               Posts
             </Text>
-            <Text fontSize={{ base: "xs", md: "sm" }}>
-              <Text as="span" fontWeight={"bold"} mr={1}>
-                {userProfile.followers.length}
-              </Text>
-              Followers
-            </Text>
-            <Text fontSize={{ base: "xs", md: "sm" }}>
-              <Text as="span" fontWeight={"bold"} mr={1}>
-                {userProfile.following.length}
-              </Text>
-              Following
-            </Text>
           </Flex>
           <Flex alignItems={"center"} gap={4}>
             <Text fontSize={"sm"} fontWeight={"bold"}>
-              {userProfile.fullName}
+              {"@" + userProfile.username}
             </Text>
           </Flex>
           <Text fontSize={"sm"}>{userProfile.bio}</Text>

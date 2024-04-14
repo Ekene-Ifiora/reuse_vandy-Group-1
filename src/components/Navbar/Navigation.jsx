@@ -16,6 +16,7 @@ import SearchProduct from "../../components/Sidebar/SearchProduct";
 import useAuthStore from "../../store/authStore";
 import React, { useState, useEffect } from "react";
 import Avatar from "react-avatar";
+import { LiaUsersCogSolid } from "react-icons/lia";
 
 const Navigation = ({
   showSearchIcon = true,
@@ -38,6 +39,12 @@ const Navigation = ({
   const goToCart = () => {
     if (user) {
       navigate(`/${authUser.username}/cart`); // Navigate using the user's UID
+    }
+  };
+
+  const goToUsersList = () => {
+    if (user) {
+      navigate(`/${authUser.username}/userslist`); // Navigate using the user's UID
     }
   };
 
@@ -83,17 +90,23 @@ const Navigation = ({
             <IoHomeOutline onClick={goToHome} className="nav-icons" />
           )}
         </div>
+        <div className="create">
+          <CreatePost className="nav-icons" />
+        </div>
         <div className="cart">
           {showCartIcon && (
             <IoCartOutline onClick={goToCart} className="nav-icons" />
           )}
         </div>
+        <div className="users">
+          {authUser && authUser.isAdmin && (
+            <LiaUsersCogSolid onClick={goToUsersList} className="nav-icons" />
+          )}
+        </div>
         <div className="chat">
           <IoChatboxEllipsesOutline onClick={goToChat} className="nav-icons" />
         </div>
-        <div className="create">
-          <CreatePost className="nav-icons" />
-        </div>
+
         <div className="logout">
           {showLogoutIcon && (
             <CiLogout onClick={handleLogout} className="nav-icons" />

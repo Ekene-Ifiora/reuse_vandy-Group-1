@@ -1,3 +1,10 @@
+.fullPage {
+  width: 100vw;
+  height: 100vh;
+  /* background-color: #fe8033; */
+  background-color: "white";
+}
+
 .navbar {
   background-color: #272b34;
   position: fixed; /* Set the navbar to fixed position */
@@ -14,6 +21,7 @@ body {
 }
 
 .productListing {
-  width: 100%;
-  height: 100%;
+  margin-top: 9vh;
+  width: 100vw;
+  height: 90vh;
 }

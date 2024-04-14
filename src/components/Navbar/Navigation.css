@@ -22,6 +22,7 @@ input {
   height: 1.5rem;
   margin-left: 2rem;
   color: white;
+  cursor: pointer;
 }
 
 body {
@@ -31,17 +32,9 @@ body {
 
 .profile-container {
   margin-left: auto;
-}
-
-.create,
-.chat,
-.cart,
-.logout,
-.home,
-.avatar,
-.profile-container {
   cursor: pointer;
 }
+
 
 .avatar {
   vertical-align: middle;
