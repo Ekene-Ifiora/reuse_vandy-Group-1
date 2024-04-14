@@ -23,35 +23,57 @@ import { RiArrowGoBackLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import useGetUserProfileByUsername from "../../hooks/useGetUserProfileByUsername";
 import Navigation from "../../components/Navbar/Navigation";
+import useNotificationStore from "../../store/notificationStore";
+import { useToast } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import useShowToast from "../../hooks/useShowToast";
 
 const ProfilePage = () => {
   const { username } = useParams();
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
-
   const { isLoading, userProfile } = useGetUserProfileByUsername(username);
   const userNotFound = !isLoading && !userProfile;
+  const showToast = useShowToast();
+  const toast = useToast();
+  // const enqueueSnackbar = useSnackbar();
+  const notifications = useNotificationStore(state => state.notifications);
+  const markNotificationAsShown = useNotificationStore(state => state.markNotificationAsShown);
+
+
+
+  useEffect(() => {
+    // notifications.filter(n => n.userId === user?.uid && !n.isShown).forEach(notification => {
+    //   console.log("Check", notification)
+    //   toast({
+    //     title: "Outbid Notification",
+    //     description: notification.message,
+    //     status: "warning",
+    //     duration: 9000,
+    //     isClosable: true,
+    //     position: "top-right",
+    //     onCloseComplete: () => markNotificationAsShown(notification.id)
+    //   });
+    // });
+    console.log('check if notification shown')
+  }, [notifications, toast, user?.uid, markNotificationAsShown]);
+
+//   useEffect(() => {
+//     notifications.filter(n => n.userId === user?.uid && !n.isShown).forEach(notification => {
+//         enqueueSnackbar(notification.message, {
+//             variant: 'warning',
+//             action: key => (
+//                 <Button onClick={() => {
+//                     markNotificationAsShown(notification.id);
+//                     closeSnackbar(key);
+//                 }}>Dismiss</Button>
+//             )
+//         });
+//     });
+// }, [notifications, enqueueSnackbar, user?.uid, markNotificationAsShown]);
   if (userNotFound) return <userNotFound />;
-  // const { colorMode } = useColorMode();
 
-  // console.log("Current color mode:", colorMode);
-
-  //   const goToHome = () => {
-  //     if (user) {
-  //       navigate(`/`);
-  //     }
-  //   };
-  // console.log('User:', user);
-  // if (user) {
-  // 	console.log("User UID:", user.uid);
-  // } else {
-  // 	console.log("User is null at this point.");
-  // }
-  // console.log('isLoading:', isLoading, 'userProfile:', userProfile);
-  // const userNotFound = !isLoading && !userProfile;
-  // if (userNotFound) return <UserNotFound user={user}/>;
-
-  return (
+  return ( 
     <>
       <div className="navbar">
         <Navigation

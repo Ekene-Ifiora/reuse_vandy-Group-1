@@ -95,7 +95,7 @@ const ChatPage = ({ sellerUsername = ""}) => {
           height="90vh"
           userName={authUser.username}
           userSecret={authUser.username}
-          projectID={"282eceef-5a55-4bac-9587-7e367d4ad838"}
+          projectID={"a79bb6db-97ca-4daa-89bd-ffc7035a69c6"}
         />
       </div>
     </>
