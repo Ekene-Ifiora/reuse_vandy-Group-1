@@ -14,11 +14,13 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
+import { sendEmailVerification } from "firebase/auth";
 
 jest.mock('react-firebase-hooks/auth');
 jest.mock('../useShowToast');
 jest.mock('../../store/authStore');
 jest.mock("firebase/firestore");
+jest.mock('firebase/auth');
 
 collection.mockResolvedValue({});
 doc.mockResolvedValue({});
@@ -26,6 +28,7 @@ getDocs.mockResolvedValue({});
 query.mockResolvedValue({});
 setDoc.mockResolvedValue({});
 where.mockResolvedValue({});
+sendEmailVerification.mockResolvedValue({});
 
 useAuthStore.mockReturnValue((_) => { return true; });
 
