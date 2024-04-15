@@ -43,15 +43,13 @@ describe('product tests', () => {
     cy.get(':nth-child(1) > .css-1rmkh0t > .css-1cp8gch').click();
     cy.get('.css-6ev086 > svg').click();
     cy.get('.css-6ev086 > .chakra-button').click();
-    cy.get('#field-\\:r25\\:').clear('4');
-    cy.get('#field-\\:r25\\:').type('40');
+    cy.get('#field-\\:r29\\:').clear('4');
+    cy.get('#field-\\:r29\\:').type('40');
     cy.get('.css-1bdxafm').click();
-    cy.get(':nth-child(8) > #chakra-toast-manager-bottom > .chakra-toast > .chakra-toast__inner > #toast-1 > .css-njbp03 > #toast-1-title').click();
     cy.get(':nth-child(1) > .css-1rmkh0t > .css-1cp8gch').click();
     cy.get('.css-6ev086 > .chakra-button').click();
     cy.get('.css-1jif775 > .chakra-button').click();
     cy.get('.css-1bdxafm').click();
-    cy.get(':nth-child(8) > #chakra-toast-manager-bottom > .chakra-toast > .chakra-toast__inner > #toast-2 > .css-njbp03 > #toast-2-title').click();
     /* ==== End Cypress Studio ==== */
   });
 });
