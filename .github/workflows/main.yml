@@ -23,7 +23,7 @@ jobs:
         npm install
 
     - name: Run tests
-      uses: npm run frontend
+      uses: cypress-io/github-action@v6
       with:
         start: npm start
 
