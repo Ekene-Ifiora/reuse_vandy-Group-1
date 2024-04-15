@@ -194,9 +194,9 @@ const ProductInfo = ({ open, onClose, item }) => {
                 {/* Product Description */}
                 <Text>{item.description}</Text>
 
-                {!item.inAuction && <Text as="b">Buy Now Price: {"$" + item.buyNowPrice}</Text>}
+                {item.inAuction == "false" && <Text as="b">Buy Now Price: {"$" + item.buyNowPrice}</Text>}
                 {/* Auction Details */}
-                {item.inAuction && (
+                {item.inAuction == "true" && (
                   <VStack spacing={2}>
                     {item.createdBy !== authUser.uid ? (
                       <HStack spacing={2}>
