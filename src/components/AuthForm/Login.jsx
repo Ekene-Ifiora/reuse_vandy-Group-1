@@ -51,7 +51,7 @@ const Login = () => {
           value={inputs.password}
           onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
         />
-        <Components.Button
+        <a
           onClick={(e) => fPass(e)}
           style={{
             cursor: "pointer",
@@ -62,7 +62,7 @@ const Login = () => {
           }}
         >
           Forgot your password?
-        </Components.Button>
+        </a>
 
         <Components.Button type="submit" isLoading={loading}>
           Sign In

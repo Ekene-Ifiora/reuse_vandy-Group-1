@@ -23,7 +23,7 @@ describe('post tests', () => {
         cy.get('.css-mjjomy').type('9');
         cy.get('.css-jsc9zn').click();
         cy.get('.chakra-button').click();
-        cy.get('#toast-3-title').click();
+        cy.get('#toast-1-title').click();
         cy.get('.css-1pq15d > .chakra-icon > path').click({multiple: true});
         cy.get('.css-jsc9zn').click();
         cy.get('.css-7ks4pj').click();
@@ -72,7 +72,7 @@ describe('post tests', () => {
         /* ==== Generated with Cypress Studio ==== */
         cy.wait(1000);
         cy.get('.chakra-button').click();
-        cy.get('#toast-3-description').click();
+        cy.get('#toast-1-description').click();
         cy.get('.css-1pq15d > .chakra-icon').click();
         cy.get('.sb-avatar__image').click();
         cy.get(':nth-child(1) > .css-1rmkh0t > .css-1cp8gch').click();

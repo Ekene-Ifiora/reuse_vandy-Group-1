@@ -14,5 +14,44 @@ describe('product tests', () => {
     cy.get('.sc-dmyCSP > .sc-hLQSwg > .sc-gLLuof').click({multiple: true});
     cy.wait(2000);
     /* ==== End Cypress Studio ==== */
+    /* ==== Generated with Cypress Studio ==== */
+    cy.get(':nth-child(2) > .card_img > .img').click();
+    cy.get('.css-1g05jab > .css-jucvzs').click();
+    cy.get('.css-15py4l6 > .chakra-button').click();
+    cy.wait(2000);
+    cy.get('.home > .nav-icons').click();
+    cy.wait(2000);
+    cy.get(':nth-child(2) > .card_img > .img').click();
+    /* ==== End Cypress Studio ==== */
+    /* ==== Generated with Cypress Studio ==== */
+    cy.get('.chakra-icon').click();
+    /* ==== End Cypress Studio ==== */
+  });
+
+  /* ==== Test Created with Cypress Studio ==== */
+  it('Edit Post', function() {
+    /* ==== Generated with Cypress Studio ==== */
+    cy.visit('/');
+    cy.get('.logout > .nav-icons').click();
+    cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').clear('jo');
+    cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').type('johntravolta@gmail.com');
+    cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').clear();
+    cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').type('Password');
+    cy.get('.sc-dmyCSP > .sc-hLQSwg > .sc-gLLuof').click();
+    cy.wait(2000);
+    cy.get('.sb-avatar__image').click();
+    cy.get(':nth-child(1) > .css-1rmkh0t > .css-1cp8gch').click();
+    cy.get('.css-6ev086 > svg').click();
+    cy.get('.css-6ev086 > .chakra-button').click();
+    cy.get('#field-\\:r25\\:').clear('4');
+    cy.get('#field-\\:r25\\:').type('40');
+    cy.get('.css-1bdxafm').click();
+    cy.get(':nth-child(8) > #chakra-toast-manager-bottom > .chakra-toast > .chakra-toast__inner > #toast-1 > .css-njbp03 > #toast-1-title').click();
+    cy.get(':nth-child(1) > .css-1rmkh0t > .css-1cp8gch').click();
+    cy.get('.css-6ev086 > .chakra-button').click();
+    cy.get('.css-1jif775 > .chakra-button').click();
+    cy.get('.css-1bdxafm').click();
+    cy.get(':nth-child(8) > #chakra-toast-manager-bottom > .chakra-toast > .chakra-toast__inner > #toast-2 > .css-njbp03 > #toast-2-title').click();
+    /* ==== End Cypress Studio ==== */
   });
 });
