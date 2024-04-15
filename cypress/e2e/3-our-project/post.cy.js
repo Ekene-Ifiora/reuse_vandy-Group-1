@@ -10,7 +10,7 @@ describe('post tests', () => {
         cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').type('johntravolta@gmail.com');
         cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').clear();
         cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').type('Password{enter}');
-        cy.get('.sc-dmyCSP > .sc-hLQSwg > .sc-gLLuof').click();
+        cy.get('.sc-dmyCSP > .sc-hLQSwg > .sc-gLLuof').click({multiple: true});
         cy.wait(2000);
         cy.get('.css-fxrfob > .nav-icons').click();
         cy.get('[placeholder="Item Name"]').clear('ch');
@@ -21,11 +21,11 @@ describe('post tests', () => {
         cy.get(':nth-child(4) > .chakra-select').select('Rothschild');
         cy.get('.css-mjjomy').clear('9');
         cy.get('.css-mjjomy').type('9');
-        cy.get('#chakra-modal--body-\\:rf\\: > [stroke="currentColor"]').click();
+        cy.get('.css-jsc9zn').click();
         cy.get('.chakra-button').click();
-        cy.get('#toast-1-title').click();
-        cy.get('.css-1pq15d > .chakra-icon > path').click();
-        cy.get('#chakra-modal--body-\\:rf\\: > [stroke="currentColor"] > path').click();
+        cy.get('#toast-3-title').click();
+        cy.get('.css-1pq15d > .chakra-icon > path').click({multiple: true});
+        cy.get('.css-jsc9zn').click();
         cy.get('.css-7ks4pj').click();
         /* ==== End Cypress Studio ==== */
     });
@@ -56,7 +56,7 @@ describe('post tests', () => {
         cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="email"]').type('johntravolta@gmail.com');
         cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').clear();
         cy.get('.sc-dmyCSP > .sc-hLQSwg > [type="password"]').type('Password{enter}');
-        cy.get('.sc-dmyCSP > .sc-hLQSwg > .sc-gLLuof').click();
+        cy.get('.sc-dmyCSP > .sc-hLQSwg > .sc-gLLuof').click({multiple: true});
         cy.wait(2000);
         cy.get('.css-fxrfob > .nav-icons').click();
         cy.get('[placeholder="Item Name"]').clear('ch');
@@ -72,7 +72,7 @@ describe('post tests', () => {
         /* ==== Generated with Cypress Studio ==== */
         cy.wait(1000);
         cy.get('.chakra-button').click();
-        cy.get('#toast-1-description').click();
+        cy.get('#toast-3-description').click();
         cy.get('.css-1pq15d > .chakra-icon').click();
         cy.get('.sb-avatar__image').click();
         cy.get(':nth-child(1) > .css-1rmkh0t > .css-1cp8gch').click();
