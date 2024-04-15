@@ -36,7 +36,7 @@ const ProductListing = () => {
         <h2 className="itemName">{item.name}</h2>
         <p className="itemDesc">{item.description}</p>
         <p className="price">
-          {item.buyNowPrice}
+          {item.bids && item.bids.length > 0 ? item.bids[0].bid : item.buyNowPrice}
           <span>{"$"}</span>
         </p>
         <div className="btn" onClick={(e) => handleAddCart(item)}>
