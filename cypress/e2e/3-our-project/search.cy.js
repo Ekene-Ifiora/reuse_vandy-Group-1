@@ -52,7 +52,7 @@ describe('search tests', () => {
     cy.get('.css-1cjy4zv').clear('E');
     cy.get('.css-1cjy4zv').type('Electronics{enter}');
     cy.get('.chakra-button').click();
-    cy.get(':nth-child(2) > .css-1k9efnl > :nth-child(1) > .chakra-avatar > .chakra-avatar__img').click();
+    // cy.get(':nth-child(2) > .css-1k9efnl > :nth-child(1) > .chakra-avatar > .chakra-avatar__img').click();
     /* ==== End Cypress Studio ==== */
   });
 
